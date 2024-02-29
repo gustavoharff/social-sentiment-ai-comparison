@@ -17,6 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
+      <head>
+        <link
+          rel="icon"
+          type="image/<generated>"
+          href="/favicon.svg"
+          sizes="<generated>"
+        />
+      </head>
       <body className="antialiased">
         <Providers>{children}</Providers>
       </body>
