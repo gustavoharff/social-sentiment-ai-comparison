@@ -1,32 +1,16 @@
-import { FacebookButton } from "@/components/buttons/facebook-button";
-import Image from "next/image";
-
-import logo from "@/assets/logo.svg";
+import { Button } from "@/components/ui/button";
+import { PlayIcon } from "@radix-ui/react-icons";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <div className="mx-auto flex w-full max-w-[350px] flex-col justify-center space-y-6">
+    <main className="flex items-center justify-center flex-grow">
+      <div className="mx-auto flex w-full max-w-[350px] flex-col justify-center space-y-6 mb-[10%]">
         <div className="flex flex-col items-center space-y-8">
-          <Image
-            src={logo}
-            alt="Social Sentiment AI Comparison"
-            className="size-12"
-            width={48}
-            height={48}
-          />
-
-          <div className="space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Social Sentiment AI Comparison
-            </h1>
-            <p className="text-sm opacity-80">
-              Comparative analysis between models for sentiment analysis from
-              Azure, AWS and Google.
-            </p>
-          </div>
+          <Button variant="outline">
+            <PlayIcon className="mr-2 h-4 w-4" />
+            Start collecting comments
+          </Button>
         </div>
-        <FacebookButton />
       </div>
     </main>
   );
