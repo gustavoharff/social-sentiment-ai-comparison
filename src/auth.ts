@@ -6,6 +6,9 @@ export const config = {
     signIn: "/auth/sign-in",
     error: "/auth/error",
   },
+  session: {
+    strategy: "jwt",
+  },
   secret: process.env.AUTH_SECRET!,
   providers: [
     FacebookProvider({
@@ -17,8 +20,33 @@ export const config = {
           scope: "public_profile",
         },
       },
+      profile(profile, tokens) {
+        return {
+          ...profile,
+          id: profile.sub,
+          idToken: tokens.id_token,
+          accessToken: tokens.access_token,
+        };
+      },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user && user.accessToken) {
+        token.accessToken = user.accessToken;
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = {
+        ...session.user,
+        accessToken: token.accessToken,
+      };
+
+      return session;
+    },
+  },
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
