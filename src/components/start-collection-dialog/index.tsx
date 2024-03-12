@@ -8,6 +8,15 @@ import { useEffect, useState } from "react";
 import { Card } from "../card";
 import { CloseOutlined, PlayCircleOutlined } from "@ant-design/icons";
 
+interface Page {
+  id: string;
+  name: string;
+}
+
+interface PagesResponse {
+  data: Page[];
+}
+
 interface StartCollectionDialogProps {
   onRequestClose: () => void;
 }
@@ -15,13 +24,13 @@ interface StartCollectionDialogProps {
 export function StartCollectionDialog(props: StartCollectionDialogProps) {
   const { onRequestClose } = props;
 
-  const [pages, setPages] = useState([]);
+  const [pages, setPages] = useState<Page[]>([]);
 
   const session = useSession();
 
   useEffect(() => {
     const fetchPages = async () => {
-      const response = await axios.get(
+      const response = await axios.get<PagesResponse>(
         "https://graph.facebook.com/me/accounts",
         {
           params: {
