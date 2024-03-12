@@ -1,6 +1,5 @@
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import Image from "next/image";
-import { Button } from "../ui/button";
 import { LogoutButton } from "../buttons/logout-button";
 
 export async function Header() {

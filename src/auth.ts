@@ -24,8 +24,8 @@ export const config = {
         return {
           ...profile,
           id: profile.sub,
-          idToken: tokens.id_token,
           accessToken: tokens.access_token,
+          image: profile.picture?.data?.url,
         };
       },
     }),
