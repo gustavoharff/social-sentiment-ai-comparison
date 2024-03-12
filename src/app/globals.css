@@ -1,6 +1,12 @@
 @tailwind base;
-@tailwind components;
 @tailwind utilities;
+
+* {
+  border: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: 0;
+}
 
 .apexcharts-svg {
   @apply overflow-visible;
@@ -8,4 +14,8 @@
 
 .apexcharts-tooltip {
   @apply !shadow-none border;
+}
+
+.custom-modal .ant-modal-confirm-paragraph {
+  max-width: inherit !important;
 }

@@ -4,6 +4,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
 import { Header } from "@/components/header";
+import "antd/dist/reset.css";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,13 +30,15 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased min-h-screen flex flex-col">
-        <Providers>
-          <Toaster />
+        <AntdRegistry>
+          <Providers>
+            <Toaster />
 
-          <Header />
+            <Header />
 
-          {children}
-        </Providers>
+            {children}
+          </Providers>
+        </AntdRegistry>
       </body>
     </html>
   );

@@ -1,9 +1,10 @@
-'use client'
+"use client";
 
-import { ComponentProps } from "react";
+import { ComponentProps, ForwardRefExoticComponent } from "react";
 import { FacebookIcon } from "../icons/facebook-icon";
-import { Button } from "../ui/button";
-import { signIn } from 'next-auth/react'
+import { Button } from "antd";
+import { signIn } from "next-auth/react";
+import Icon from "@ant-design/icons";
 
 export function FacebookButton(props: ComponentProps<typeof Button>) {
   async function handleLogin() {
@@ -13,8 +14,12 @@ export function FacebookButton(props: ComponentProps<typeof Button>) {
   }
 
   return (
-    <Button variant="outline" onClick={handleLogin} {...props}>
-      <FacebookIcon className="mr-2 h-4 w-4" />
+    <Button
+      type="primary"
+      icon={<Icon component={FacebookIcon as ForwardRefExoticComponent<any>} />}
+      onClick={handleLogin}
+      {...props}
+    >
       Sign in with Facebook
     </Button>
   );

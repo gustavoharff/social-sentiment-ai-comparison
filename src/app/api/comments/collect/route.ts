@@ -8,7 +8,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  console.log(session.user)
-
   return NextResponse.json({ ok: true });
 }

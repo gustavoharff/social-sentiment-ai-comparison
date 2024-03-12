@@ -17,13 +17,17 @@ export const config = {
       authorization: {
         params: {
           auth_type: "rerequest",
-          scope: "public_profile",
+          scope: [
+            "public_profile",
+            "pages_show_list",
+            "pages_read_engagement",
+          ].join(","),
         },
       },
       profile(profile, tokens) {
         return {
           ...profile,
-          id: profile.sub,
+          id: profile.id,
           accessToken: tokens.access_token,
           image: profile.picture?.data?.url,
         };
