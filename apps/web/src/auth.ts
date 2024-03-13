@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
+import { env } from '@ssaic/env'
 
 export const config = {
   pages: {
@@ -9,11 +10,11 @@ export const config = {
   session: {
     strategy: "jwt",
   },
-  secret: process.env.AUTH_SECRET!,
+  secret: env.AUTH_SECRET,
   providers: [
     FacebookProvider({
-      clientId: process.env.AUTH_FACEBOOK_ID!,
-      clientSecret: process.env.AUTH_FACEBOOK_SECRET!,
+      clientId: env.FACEBOOK_CLIENT_ID,
+      clientSecret: env.FACEBOOK_CLIENT_SECRET,
       authorization: {
         params: {
           auth_type: "rerequest",
