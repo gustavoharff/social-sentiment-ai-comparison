@@ -10,7 +10,7 @@ export default function Login() {
         <div className="flex flex-col items-center space-y-8">
           <Image
             src={logo}
-            alt="Social Sentiment AI Comparison"
+            alt="Vizo Logo"
             className="size-12"
             width={48}
             height={48}

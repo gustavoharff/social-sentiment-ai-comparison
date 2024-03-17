@@ -10,7 +10,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Social Sentiment AI Comparison",
+  title: "Vizo",
   description: "Compare social sentiment analysis tools",
 };
 

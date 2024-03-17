@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-  Social Sentiment AI Comparison 
+  Vizo
 </h1>
 
 Comparing Sentiment Analysis Models: Azure vs. AWS vs. Google.
