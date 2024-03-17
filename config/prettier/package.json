@@ -1,5 +1,5 @@
 {
-  "name": "@ssaic/prettier",
+  "name": "@vizo/prettier",
   "version": "0.0.0",
   "main": "index.mjs",
   "license": "MIT",
@@ -8,5 +8,5 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.11"
   },
-  "prettier": "@ssaic/prettier"
+  "prettier": "@vizo/prettier"
 }

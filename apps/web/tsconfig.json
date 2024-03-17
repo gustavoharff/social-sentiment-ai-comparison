@@ -1,5 +1,5 @@
 {
-  "extends": "@ssaic/tsconfig/nextjs.json",
+  "extends": "@vizo/tsconfig/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@vizo/auth";
 import Image from "next/image";
 import { LogoutButton } from "../buttons/logout-button";
 

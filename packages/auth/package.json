@@ -1,5 +1,5 @@
 {
-  "name": "@vizo/env",
+  "name": "@vizo/auth",
   "main": "./index.ts",
   "types": "./index.ts",
   "version": "0.0.0",
@@ -8,14 +8,16 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@t3-oss/env-nextjs": "0.8.0",
-    "zod": "^3.22.4"
+    "@auth/core": "^0.25.0",
+    "@vizo/drizzle": "workspace:*",
+    "@vizo/env": "workspace:*",
+    "drizzle-orm": "^0.29.3",
+    "next-auth": "beta"
   },
   "devDependencies": {
     "@vizo/eslint-config": "workspace:*",
     "@vizo/prettier": "workspace:*",
-    "@vizo/tsconfig": "workspace:*",
-    "@types/node": "20.4.0"
+    "@vizo/tsconfig": "workspace:*"
   },
   "eslintConfig": {
     "root": true,
@@ -23,5 +25,5 @@
       "@vizo/eslint-config/lib"
     ]
   },
-  "prettier": "@vizo/prettier"
+  "prettier": "@nivo/prettier"
 }

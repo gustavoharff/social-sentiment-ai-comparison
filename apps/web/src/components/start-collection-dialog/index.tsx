@@ -1,6 +1,5 @@
 "use client";
 
-import { auth } from "@/auth";
 import { Button, Form, Select } from "antd";
 import axios from "axios";
 import { useSession } from "next-auth/react";

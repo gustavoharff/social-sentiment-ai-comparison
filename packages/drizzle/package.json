@@ -1,0 +1,38 @@
+{
+  "name": "@vizo/drizzle",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "db:generate": "pnpm env:load drizzle-kit generate:pg",
+    "db:migrate": "pnpm env:load tsx migrate.ts",
+    "db:studio": "pnpm env:load drizzle-kit studio",
+    "db:seed": "pnpm env:load tsx ./seed.ts",
+    "lint": "eslint .",
+    "env:load": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "@auth/core": "^0.25.0",
+    "@vercel/postgres": "^0.7.2",
+    "@vizo/env": "workspace:*",
+    "dotenv-cli": "7.3.0",
+    "drizzle-orm": "^0.29.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@vizo/eslint-config": "workspace:*",
+    "@vizo/prettier": "workspace:*",
+    "@vizo/tsconfig": "workspace:*",
+    "drizzle-kit": "^0.20.14",
+    "pg": "8.11.3",
+    "tsx": "4.7.1"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@vizo/eslint-config/lib"
+    ]
+  },
+  "prettier": "@vizo/prettier"
+}

@@ -1,5 +1,5 @@
 {
-  "name": "@ssaic/eslint-config",
+  "name": "@vizo/eslint-config",
   "version": "0.0.0",
   "files": [
     "lib.js",
@@ -12,7 +12,7 @@
     "@rocketseat/eslint-config": "2.2.2",
     "eslint-config-next": "^14.1.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
-    "@ssaic/prettier": "workspace:*"
+    "@vizo/prettier": "workspace:*"
   },
   "overrides": {
     "@typescript-eslint/eslint-plugin": "^6.21.0",
@@ -25,5 +25,5 @@
       "./lib.js"
     ]
   },
-  "prettier": "@ssaic/prettier"
+  "prettier": "@vizo/prettier"
 }

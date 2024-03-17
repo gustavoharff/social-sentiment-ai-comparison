@@ -18,7 +18,7 @@ export default function Login() {
 
           <div className="space-y-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">
-              Social Sentiment AI Comparison
+              Vizo
             </h1>
             <p className="text-sm opacity-80">
               Comparative analysis between models for sentiment analysis from
