@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./.github/icon.svg" width="180" />
+  <img src="./.github/icon.svg" width="80" />
 </p>
 
 <h1 align="center">
