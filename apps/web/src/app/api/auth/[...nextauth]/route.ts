@@ -1,3 +1,3 @@
-import { handlers } from "@vizo/auth";
+import { handlers } from '@vizo/auth'
 
-export const { GET, POST } = handlers;
+export const { GET, POST } = handlers

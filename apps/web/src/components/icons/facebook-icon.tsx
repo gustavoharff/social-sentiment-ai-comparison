@@ -1,8 +1,8 @@
-import { forwardRef } from "react";
-import { IconProps } from "@radix-ui/react-icons/dist/types";
+import { IconProps } from '@radix-ui/react-icons/dist/types'
+import { forwardRef } from 'react'
 
 export const FacebookIcon = forwardRef<SVGSVGElement, IconProps>(
-  ({ color = "currentColor", ...props }, forwardedRef) => {
+  ({ color = 'currentColor', ...props }, forwardedRef) => {
     return (
       <svg
         width="15"
@@ -20,8 +20,8 @@ export const FacebookIcon = forwardRef<SVGSVGElement, IconProps>(
           clipRule="evenodd"
         />
       </svg>
-    );
-  }
-);
+    )
+  },
+)
 
-FacebookIcon.displayName = "FacebookIcon";
+FacebookIcon.displayName = 'FacebookIcon'

@@ -1,47 +1,48 @@
-"use client";
+'use client'
 
-import { Button, Form, Select } from "antd";
-import axios from "axios";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { Card } from "../card";
-import { CloseOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlayCircleOutlined } from '@ant-design/icons'
+import { Button, Form, Select } from 'antd'
+import axios from 'axios'
+import { useSession } from 'next-auth/react'
+import { useEffect, useState } from 'react'
+
+import { Card } from '../card'
 
 interface Page {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 
 interface PagesResponse {
-  data: Page[];
+  data: Page[]
 }
 
 interface StartCollectionDialogProps {
-  onRequestClose: () => void;
+  onRequestClose: () => void
 }
 
 export function StartCollectionDialog(props: StartCollectionDialogProps) {
-  const { onRequestClose } = props;
+  const { onRequestClose } = props
 
-  const [pages, setPages] = useState<Page[]>([]);
+  const [pages, setPages] = useState<Page[]>([])
 
-  const session = useSession();
+  const session = useSession()
 
   useEffect(() => {
     const fetchPages = async () => {
       const response = await axios.get<PagesResponse>(
-        "https://graph.facebook.com/me/accounts",
+        'https://graph.facebook.com/me/accounts',
         {
           params: {
             access_token: session.data?.user.accessToken,
           },
-        }
-      );
-      setPages(response.data.data);
-    };
+        },
+      )
+      setPages(response.data.data)
+    }
 
-    fetchPages();
-  }, []);
+    fetchPages()
+  }, [])
 
   return (
     <Card>
@@ -59,7 +60,7 @@ export function StartCollectionDialog(props: StartCollectionDialogProps) {
                     <Select.Option key={page.id} value={page.id}>
                       {page.name}
                     </Select.Option>
-                  );
+                  )
                 })}
               </Select>
             </Form.Item>
@@ -79,5 +80,5 @@ export function StartCollectionDialog(props: StartCollectionDialogProps) {
         </Form>
       </Card.Body>
     </Card>
-  );
+  )
 }

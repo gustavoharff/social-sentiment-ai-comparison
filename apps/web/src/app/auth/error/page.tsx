@@ -1,10 +1,9 @@
-import { ArrowRightIcon } from '@radix-ui/react-icons'
+import { Button } from 'antd'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import logo from '@/assets/logo.svg'
-import { Button } from '@/components/ui/button'
 
 export const metadata: Metadata = {
   title: 'Access denied',
@@ -32,11 +31,8 @@ export default function SignInPage() {
               authenticate.
             </p>
           </div>
-          <Button asChild variant="outline" type="button" className="w-full">
-            <Link href="/auth/sign-in">
-              Try again
-              <ArrowRightIcon className="ml-2 h-4 w-4" />
-            </Link>
+          <Button className="w-full">
+            <Link href="/auth/sign-in">Try again</Link>
           </Button>
         </div>
       </div>

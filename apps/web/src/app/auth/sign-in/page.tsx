@@ -1,7 +1,7 @@
-import { FacebookButton } from "@/components/buttons/facebook-button";
-import Image from "next/image";
+import Image from 'next/image'
 
-import logo from "@/assets/logo.svg";
+import logo from '@/assets/logo.svg'
+import { FacebookButton } from '@/components/buttons/facebook-button'
 
 export default function Login() {
   return (
@@ -17,9 +17,7 @@ export default function Login() {
           />
 
           <div className="space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Vizo
-            </h1>
+            <h1 className="text-2xl font-semibold tracking-tight">Vizo</h1>
             <p className="text-sm opacity-80">
               Comparative analysis between models for sentiment analysis from
               Azure, AWS and Google.
@@ -30,5 +28,5 @@ export default function Login() {
         <FacebookButton />
       </div>
     </main>
-  );
+  )
 }

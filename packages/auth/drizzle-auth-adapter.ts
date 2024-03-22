@@ -65,7 +65,7 @@ export const drizzleAuthAdapter: Adapter = {
 
     return drizzleUser
   },
-  
+
   async linkAccount(accountToCreate) {
     await db.insert(account).values(accountToCreate)
   },

@@ -1,8 +1,8 @@
+import { env } from '@vizo/env'
 import type { NextAuthConfig, Session } from 'next-auth'
 
 import { drizzleAuthAdapter } from './drizzle-auth-adapter'
 import { facebookProvider } from './facebook-provider'
-import { env } from '@vizo/env'
 
 export const authConfig = {
   adapter: drizzleAuthAdapter,
@@ -16,7 +16,7 @@ export const authConfig = {
   },
   secret: env.AUTH_SECRET,
   callbacks: {
-    jwt({ token, user, session, trigger }) {
+    jwt({ token, session, trigger }) {
       // if (user) {
       //   token.companyId = user.companyId
       // }

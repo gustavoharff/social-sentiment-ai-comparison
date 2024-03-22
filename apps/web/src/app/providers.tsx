@@ -1,9 +1,8 @@
-"use client";
+import { App } from 'antd'
+import { SessionProvider } from 'next-auth/react'
+import { ThemeProvider } from 'next-themes'
 
-import { ConfigProvider } from "@/components/config-provider";
-import { App } from "antd";
-import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "next-themes";
+import { ConfigProvider } from '@/components/config-provider'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -17,7 +16,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <ConfigProvider>
           <App
             style={{
-              color: "inherit",
+              color: 'inherit',
             }}
           >
             {children}
@@ -25,5 +24,5 @@ export function Providers({ children }: { children: React.ReactNode }) {
         </ConfigProvider>
       </SessionProvider>
     </ThemeProvider>
-  );
+  )
 }

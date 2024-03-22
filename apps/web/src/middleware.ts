@@ -1,16 +1,20 @@
-import { NextRequest } from "next/server";
-import { auth } from "@vizo/auth"
+import { auth } from '@vizo/auth'
+import { NextRequest } from 'next/server'
+
+const publicUrls = ['/auth/sign-in', '/auth/error']
+const privateUrls = ['/']
 
 export async function middleware(request: NextRequest) {
-  const session = await auth();
+  const session = await auth()
 
-  if (!session && request.nextUrl.pathname === '/') {
-    const response = Response.redirect(new URL("/auth/sign-in", request.url));
+  if (!session && privateUrls.includes(request.nextUrl.pathname)) {
+    return Response.redirect(new URL('/auth/sign-in', request.url))
+  }
 
-    return response;
+  if (session && publicUrls.includes(request.nextUrl.pathname)) {
+    return Response.redirect(new URL('/', request.url))
   }
 }
-
 
 export const config = {
   matcher: [
@@ -21,6 +25,6 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
   ],
-};
+}

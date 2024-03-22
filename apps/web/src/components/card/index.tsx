@@ -19,10 +19,10 @@ export function Card({ children, style = {}, className }: CardProps) {
         'rounded-md',
         'border border-solid border-[#d7dbdf] dark:border-[#3a3f42]',
         'overflow-hidden',
-        className
+        className,
       )}
       style={{
-        ...style
+        ...style,
       }}
     >
       {children}

@@ -25,5 +25,5 @@
       "@vizo/eslint-config/lib"
     ]
   },
-  "prettier": "@nivo/prettier"
+  "prettier": "@vizo/prettier"
 }
