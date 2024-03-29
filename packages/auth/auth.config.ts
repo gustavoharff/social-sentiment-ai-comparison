@@ -16,10 +16,10 @@ export const authConfig = {
   },
   secret: env.AUTH_SECRET,
   callbacks: {
-    jwt({ token, session, trigger }) {
-      // if (user) {
-      //   token.companyId = user.companyId
-      // }
+    jwt({ token, session, trigger, account }) {
+      if (account && account.access_token) {
+        token.accessToken = account.access_token
+      }
 
       function isSessionAvailable(session: unknown): session is Session {
         return !!session

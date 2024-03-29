@@ -3,7 +3,6 @@
 import { CloseOutlined, PlayCircleOutlined } from '@ant-design/icons'
 import { Button, Form, Select } from 'antd'
 import axios from 'axios'
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
 import { Card } from '../card'
@@ -18,31 +17,37 @@ interface PagesResponse {
 }
 
 interface StartCollectionDialogProps {
+  onPick: (page: Page) => void
   onRequestClose: () => void
 }
 
+interface FormValues {
+  page: string
+}
+
 export function StartCollectionDialog(props: StartCollectionDialogProps) {
-  const { onRequestClose } = props
+  const { onPick, onRequestClose } = props
 
   const [pages, setPages] = useState<Page[]>([])
 
-  const session = useSession()
-
   useEffect(() => {
     const fetchPages = async () => {
-      const response = await axios.get<PagesResponse>(
-        'https://graph.facebook.com/me/accounts',
-        {
-          params: {
-            access_token: session.data?.user.accessToken,
-          },
-        },
-      )
+      const response = await axios.get<PagesResponse>('/api/pages')
       setPages(response.data.data)
     }
 
     fetchPages()
   }, [])
+
+  function onFinish(values: FormValues) {
+    const page = pages.find((page) => page.id === values.page)
+
+    if (page) {
+      onPick(page)
+
+      onRequestClose()
+    }
+  }
 
   return (
     <Card>
@@ -51,9 +56,18 @@ export function StartCollectionDialog(props: StartCollectionDialogProps) {
       </Card.Header>
 
       <Card.Body>
-        <Form>
+        <Form onFinish={onFinish}>
           <div className="flex flex-col px-6 pt-4">
-            <Form.Item label="Page">
+            <span className="mb-4">
+              Select a page to start collecting comments from.
+            </span>
+
+            <Form.Item
+              label="Page"
+              name="page"
+              required
+              rules={[{ required: true }]}
+            >
               <Select>
                 {pages.map((page) => {
                   return (

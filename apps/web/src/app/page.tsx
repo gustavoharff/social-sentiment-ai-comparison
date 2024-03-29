@@ -26,6 +26,9 @@ export default function Home() {
               const control = modal({
                 content: (
                   <StartCollectionDialog
+                    onPick={(page) => {
+                      console.log(page)
+                    }}
                     onRequestClose={() => control.destroy()}
                   />
                 ),
