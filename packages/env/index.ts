@@ -6,6 +6,7 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(['development', 'production', 'test'])
       .default('development'),
+    POSTGRES_URL: z.string().min(1),
     // DIRECT_DATABASE_URL: z.string().min(1),
     AUTH_SECRET: z.string().min(1),
     FACEBOOK_CLIENT_ID: z.string().min(1),
@@ -20,6 +21,7 @@ export const env = createEnv({
       .default('development'),
   },
   runtimeEnv: {
+    POSTGRES_URL: process.env.POSTGRES_URL,
     // NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
     VERCEL_ENV: process.env.VERCEL_ENV,
     NODE_ENV: process.env.NODE_ENV,

@@ -15,6 +15,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <SessionProvider>
         <ConfigProvider>
           <App
+            className="flex flex-grow flex-col"
             style={{
               color: 'inherit',
             }}

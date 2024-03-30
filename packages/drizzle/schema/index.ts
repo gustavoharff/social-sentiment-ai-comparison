@@ -1,3 +1,5 @@
 export * from './account'
+export * from './pipeline'
 export * from './session'
+export * from './task'
 export * from './user'

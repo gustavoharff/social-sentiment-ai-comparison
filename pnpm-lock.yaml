@@ -29,9 +29,15 @@ importers:
       '@vizo/auth':
         specifier: workspace:*
         version: link:../../packages/auth
+      '@vizo/drizzle':
+        specifier: workspace:^
+        version: link:../../packages/drizzle
       '@vizo/env':
         specifier: workspace:*
         version: link:../../packages/env
+      '@vizo/facebook-sdk':
+        specifier: workspace:^
+        version: link:../../packages/facebook-sdk
       antd:
         specifier: 5.15.3
         version: 5.15.3(react-dom@18.2.0)(react@18.2.0)
@@ -44,6 +50,9 @@ importers:
       clsx:
         specifier: ^2.1.0
         version: 2.1.0
+      dayjs:
+        specifier: ^1.11.10
+        version: 1.11.10
       dotenv-cli:
         specifier: 7.3.0
         version: 7.3.0
@@ -59,6 +68,9 @@ importers:
       next-themes:
         specifier: 0.3.0
         version: 0.3.0(react-dom@18.2.0)(react@18.2.0)
+      pretty-ms:
+        specifier: ^9.0.0
+        version: 9.0.0
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -211,6 +223,25 @@ importers:
       zod:
         specifier: ^3.22.4
         version: 3.22.4
+    devDependencies:
+      '@types/node':
+        specifier: 20.4.0
+        version: 20.4.0
+      '@vizo/eslint-config':
+        specifier: workspace:*
+        version: link:../../config/eslint-config
+      '@vizo/prettier':
+        specifier: workspace:*
+        version: link:../../config/prettier
+      '@vizo/tsconfig':
+        specifier: workspace:*
+        version: link:../../config/tsconfig
+
+  packages/facebook-sdk:
+    dependencies:
+      axios:
+        specifier: ^1.6.7
+        version: 1.6.7
     devDependencies:
       '@types/node':
         specifier: 20.4.0
@@ -3878,6 +3909,11 @@ packages:
       callsites: 3.1.0
     dev: true
 
+  /parse-ms@4.0.0:
+    resolution: {integrity: sha512-TXfryirbmq34y8QBwgqCVLi+8oA3oWx2eAnSn62ITyEhEYaWRlVZ2DvMM9eZbMs/RfxPu/PK/aBLyGj4IrqMHw==}
+    engines: {node: '>=18'}
+    dev: false
+
   /path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
     engines: {node: '>=8'}
@@ -4161,6 +4197,13 @@ packages:
 
   /pretty-format@3.8.0:
     resolution: {integrity: sha512-WuxUnVtlWL1OfZFQFuqvnvs6MiAGk9UNsBostyBOB0Is9wb5uRESevA6rnl/rkksXaGX3GzZhPup5d6Vp1nFew==}
+    dev: false
+
+  /pretty-ms@9.0.0:
+    resolution: {integrity: sha512-E9e9HJ9R9NasGOgPaPE8VMeiPKAyWR5jcFpNnwIejslIhWqdqOrb2wShBsncMPUb+BcCd2OPYfh7p2W6oemTng==}
+    engines: {node: '>=18'}
+    dependencies:
+      parse-ms: 4.0.0
     dev: false
 
   /prop-types@15.8.1:

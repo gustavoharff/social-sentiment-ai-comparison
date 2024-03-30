@@ -1,0 +1,26 @@
+{
+  "name": "@vizo/facebook-sdk",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "axios": "^1.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "20.4.0",
+    "@vizo/eslint-config": "workspace:*",
+    "@vizo/prettier": "workspace:*",
+    "@vizo/tsconfig": "workspace:*"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@vizo/eslint-config/lib"
+    ]
+  },
+  "prettier": "@vizo/prettier"
+}

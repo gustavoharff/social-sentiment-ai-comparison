@@ -8,6 +8,27 @@
       "when": 1710688777462,
       "tag": "0000_fearless_valeria_richards",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1711767027422,
+      "tag": "0001_organic_flatman",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1711771189716,
+      "tag": "0002_known_joystick",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1711771526347,
+      "tag": "0003_high_energizer",
+      "breakpoints": true
     }
   ]
 }

@@ -18,6 +18,7 @@ export const authConfig = {
   callbacks: {
     jwt({ token, session, trigger, account }) {
       if (account && account.access_token) {
+        token.providerAccountId = account.providerAccountId
         token.accessToken = account.access_token
       }
 

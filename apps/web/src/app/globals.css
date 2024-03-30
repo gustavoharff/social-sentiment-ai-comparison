@@ -1,6 +1,14 @@
 @tailwind base;
 @tailwind utilities;
 
+html {
+  --default-border: #d9d9d9;
+}
+
+html.dark {
+  --default-border: #424242;
+}
+
 * {
   border: 0;
   padding: 0;

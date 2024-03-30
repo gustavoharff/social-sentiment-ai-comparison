@@ -67,7 +67,11 @@ export const drizzleAuthAdapter: Adapter = {
   },
 
   async linkAccount(accountToCreate) {
-    await db.insert(account).values(accountToCreate)
+    await db.insert(account).values({
+      ...accountToCreate,
+      accessToken: accountToCreate.access_token,
+      tokenType: accountToCreate.token_type,
+    })
   },
 
   async createSession(sessionToCreate) {
