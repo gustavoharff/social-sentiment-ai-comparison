@@ -34,7 +34,7 @@ export default function Pepeline() {
         <Section
           key={task.id}
           id={task.id}
-          lines={[]}
+          fileUrl={task.fileUrl!}
           name={task.name}
           status={task.status}
           title={task.name}

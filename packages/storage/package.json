@@ -1,0 +1,28 @@
+{
+  "name": "@vizo/storage",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@azure/storage-blob": "^12.17.0",
+    "@vizo/env": "workspace:*",
+    "dayjs": "^1.11.10"
+  },
+  "devDependencies": {
+    "@types/node": "20.4.0",
+    "@vizo/eslint-config": "workspace:*",
+    "@vizo/prettier": "workspace:*",
+    "@vizo/tsconfig": "workspace:*"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@vizo/eslint-config/lib"
+    ]
+  },
+  "prettier": "@vizo/prettier"
+}

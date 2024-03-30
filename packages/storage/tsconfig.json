@@ -1,0 +1,5 @@
+{
+  "extends": "@vizo/tsconfig/lib.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"]
+}

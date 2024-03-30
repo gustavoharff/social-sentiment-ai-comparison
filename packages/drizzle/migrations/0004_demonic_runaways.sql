@@ -1,0 +1,1 @@
+ALTER TABLE "tasks" ADD COLUMN "file_url" text NOT NULL;

@@ -3,9 +3,13 @@ import { db } from '@vizo/drizzle'
 import { pipeline, task } from '@vizo/drizzle/schema'
 import { env } from '@vizo/env'
 import { FacebookSDK } from '@vizo/facebook-sdk'
+import { upload } from '@vizo/storage'
 import axios from 'axios'
+import { eq } from 'drizzle-orm'
 import { NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
+
+import { execution } from './execution'
 
 export async function GET() {
   return NextResponse.json([])
@@ -21,8 +25,6 @@ export async function POST(request: NextRequest) {
     req: request,
     secret: env.AUTH_SECRET,
   })
-
-  console.log('token', token)
 
   if (!token || !token.accessToken || !session || !token.providerAccountId) {
     return NextResponse.json(
@@ -58,29 +60,91 @@ export async function POST(request: NextRequest) {
       })
       .returning()
 
-    await db.insert(task).values({
-      name: 'comments-collection',
-      type: 'comments-collection',
-      pipelineId,
+    const [commentsTask] = await db
+      .insert(task)
+      .values({
+        name: 'Comments collection',
+        type: 'comments-collection',
+        pipelineId,
+      })
+      .returning()
+
+    const lines = [{ type: 'text', content: 'Hello, world!' }]
+
+    const commentsTaskLogs = await upload({
+      blob: Buffer.from(JSON.stringify(lines)),
+      contentType: 'application/json',
+      length: JSON.stringify(lines).length,
+      name: `task-${commentsTask.id}`,
     })
 
-    await db.insert(task).values({
-      name: 'aws-analysis',
-      type: 'aws-analysis',
-      pipelineId,
+    await db
+      .update(task)
+      .set({ fileUrl: commentsTaskLogs })
+      .where(eq(task.id, commentsTask.id))
+
+    const [awsTask] = await db
+      .insert(task)
+      .values({
+        name: 'AWS Analysis',
+        type: 'aws-analysis',
+        pipelineId,
+      })
+      .returning()
+
+    const awsTaskLogs = await upload({
+      blob: Buffer.from(JSON.stringify([])),
+      contentType: 'application/json',
+      length: JSON.stringify([]).length,
+      name: `task-${awsTask.id}`,
     })
 
-    await db.insert(task).values({
-      name: 'google-analysis',
-      type: 'google-analysis',
-      pipelineId,
+    await db
+      .update(task)
+      .set({ fileUrl: awsTaskLogs })
+      .where(eq(task.id, awsTask.id))
+
+    const [googleTask] = await db
+      .insert(task)
+      .values({
+        name: 'Google analysis',
+        type: 'google-analysis',
+        pipelineId,
+      })
+      .returning()
+
+    const googleTaskLogs = await upload({
+      blob: Buffer.from(JSON.stringify([])),
+      contentType: 'application/json',
+      length: JSON.stringify([]).length,
+      name: `task-${googleTask.id}`,
     })
 
-    await db.insert(task).values({
-      name: 'azure-analysis',
-      type: 'azure-analysis',
-      pipelineId,
+    await db
+      .update(task)
+      .set({ fileUrl: googleTaskLogs })
+      .where(eq(task.id, googleTask.id))
+
+    const [azureTask] = await db
+      .insert(task)
+      .values({
+        name: 'Azure analysis',
+        type: 'azure-analysis',
+        pipelineId,
+      })
+      .returning()
+
+    const azureTaskLogs = await upload({
+      blob: Buffer.from(JSON.stringify([])),
+      contentType: 'application/json',
+      length: JSON.stringify([]).length,
+      name: `task-${azureTask.id}`,
     })
+
+    await db
+      .update(task)
+      .set({ fileUrl: azureTaskLogs })
+      .where(eq(task.id, azureTask.id))
 
     const drizzlePipeline = await db.query.pipeline.findFirst({
       where(fields, { eq }) {
@@ -89,6 +153,13 @@ export async function POST(request: NextRequest) {
       with: {
         tasks: true,
       },
+    })
+
+    execution({
+      commentsTaskId: commentsTask.id,
+      awsTaskId: awsTask.id,
+      googleTaskId: googleTask.id,
+      azureTaskId: azureTask.id,
     })
 
     return NextResponse.json(drizzlePipeline)

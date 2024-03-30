@@ -8,37 +8,42 @@ import {
   RightOutlined,
   SettingOutlined,
 } from '@ant-design/icons'
+import axios from 'axios'
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { green, red, yellow } from 'tailwindcss/colors'
 
 import { Time } from './time'
 
 interface SectionProps {
   id: string
+  name: string
   title: string
+  fileUrl: string
   startedAt?: Date | null
   finishedAt?: Date | null
   status: 'pending' | 'running' | 'completed' | 'failed'
-  name: string
-  lines: string[]
-  onStatusChange?: () => void
+}
+
+type Line = {
+  type: 'text'
+  content: string
 }
 
 export function Section(props: SectionProps) {
   const {
     status: initialStatus,
     title,
+    fileUrl,
     startedAt: initialStartedAt,
     finishedAt: initialFinishedAt,
-    lines: initialLines,
   } = props
 
   const [status, setStatus] = useState(initialStatus)
   const [startedAt, setStartedAt] = useState(initialStartedAt)
   const [finishedAt, setFinishedAt] = useState(initialFinishedAt)
 
-  const [lines, setLines] = useState(initialLines)
+  const [lines, setLines] = useState<Line[]>([])
 
   const [isCollapsed, setIsCollapsed] = useState(status !== 'running')
 
@@ -62,6 +67,60 @@ export function Section(props: SectionProps) {
       <CloseCircleFilled className="text-base" style={{ color: red[500] }} />
     ),
   }
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+
+    if (status === 'completed' || status === 'failed') {
+      return () => {
+        if (interval) {
+          clearInterval(interval)
+        }
+      }
+    }
+
+    const fetchLogs = async () => {
+      const response = await axios.get(fileUrl)
+
+      setLines(response.data)
+    }
+
+    interval = setInterval(fetchLogs, 2000)
+
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [fileUrl, status])
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+
+    if (status === 'completed' || status === 'failed') {
+      return () => {
+        if (interval) {
+          clearInterval(interval)
+        }
+      }
+    }
+
+    const fetchTask = async () => {
+      const response = await axios.get('/api/tasks/' + props.id)
+
+      setStartedAt(response.data.startedAt)
+      setFinishedAt(response.data.finishedAt)
+      setStatus(response.data.status)
+    }
+
+    interval = setInterval(fetchTask, 2000)
+
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
+  }, [props.id, status])
 
   function renderLine(line: string, index: number) {
     const hasAnsi = line.includes('\\u001b')
@@ -198,7 +257,7 @@ export function Section(props: SectionProps) {
 
       {!isCollapsed && (
         <pre className="mb-0 whitespace-pre-wrap break-all py-4">
-          {lines.map((line, index) => renderLine(line, index))}
+          {lines.map((line, index) => renderLine(line.content, index))}
 
           {status === 'running' && (
             <span className="flex pr-4 font-normal leading-[1.6154] tracking-[-.003rem] hover:bg-[#eae7e7] hover:dark:bg-[#1d1d1d]">

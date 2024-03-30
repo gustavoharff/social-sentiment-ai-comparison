@@ -11,6 +11,8 @@ export const env = createEnv({
     AUTH_SECRET: z.string().min(1),
     FACEBOOK_CLIENT_ID: z.string().min(1),
     FACEBOOK_CLIENT_SECRET: z.string().min(1),
+    AZURE_STORAGE_CONNECTION_STRING: z.string().min(1),
+    AZURE_STORAGE_CONTAINER_NAME: z.string().min(1),
   },
   client: {
     // NEXT_PUBLIC_VERCEL_URL: z.string().url().min(1),
@@ -29,6 +31,9 @@ export const env = createEnv({
     AUTH_SECRET: process.env.AUTH_SECRET,
     FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
     FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
+    AZURE_STORAGE_CONNECTION_STRING:
+      process.env.AZURE_STORAGE_CONNECTION_STRING,
+    AZURE_STORAGE_CONTAINER_NAME: process.env.AZURE_STORAGE_CONTAINER_NAME,
   },
   emptyStringAsUndefined: true,
 })
