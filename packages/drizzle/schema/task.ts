@@ -23,6 +23,7 @@ export const task = pgTable('tasks', {
   type: taskType('type').notNull(),
   status: taskStatusEnum('status').notNull().default('pending'),
   fileUrl: text('file_url'),
+  createdAt: timestamp('created_at').defaultNow(),
   startedAt: timestamp('started_at'),
   finishedAt: timestamp('finished_at'),
   pipelineId: uuid('pipeline_id')

@@ -12,7 +12,32 @@ import { getToken } from 'next-auth/jwt'
 import { execution } from './execution'
 
 export async function GET() {
-  return NextResponse.json([])
+  const session = await auth()
+
+  if (!session || !session.user.id) {
+    return NextResponse.json(
+      { message: 'You must be authenticated to access this resource' },
+      { status: 401 },
+    )
+  }
+
+  const pipelines = await db.query.pipeline.findMany({
+    where(fields, { eq }) {
+      return eq(fields.userId, session.user.id!)
+    },
+    with: {
+      tasks: {
+        orderBy(fields, { asc }) {
+          return asc(fields.createdAt)
+        },
+      },
+    },
+    orderBy(fields, { desc }) {
+      return desc(fields.createdAt)
+    },
+  })
+
+  return NextResponse.json(pipelines)
 }
 
 export async function POST(request: NextRequest) {
@@ -54,6 +79,7 @@ export async function POST(request: NextRequest) {
     const [{ id: pipelineId }] = await db
       .insert(pipeline)
       .values({
+        title: page.name,
         pageId: page.id,
         accountId: account.id,
         userId: token.sub!,

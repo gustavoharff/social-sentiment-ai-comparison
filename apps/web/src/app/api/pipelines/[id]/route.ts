@@ -12,7 +12,11 @@ export async function GET(
       return eq(fields.id, id)
     },
     with: {
-      tasks: true,
+      tasks: {
+        orderBy(fields, { asc }) {
+          return asc(fields.createdAt)
+        },
+      },
     },
   })
 

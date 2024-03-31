@@ -71,18 +71,20 @@ export function Section(props: SectionProps) {
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
 
+    const fetchLogs = async () => {
+      const response = await axios.get(fileUrl)
+
+      setLines(response.data)
+    }
+
     if (status === 'completed' || status === 'failed') {
+      fetchLogs()
+
       return () => {
         if (interval) {
           clearInterval(interval)
         }
       }
-    }
-
-    const fetchLogs = async () => {
-      const response = await axios.get(fileUrl)
-
-      setLines(response.data)
     }
 
     interval = setInterval(fetchLogs, 2000)
@@ -97,20 +99,34 @@ export function Section(props: SectionProps) {
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
 
-    if (status === 'completed' || status === 'failed') {
-      return () => {
-        if (interval) {
-          clearInterval(interval)
-        }
-      }
-    }
-
     const fetchTask = async () => {
       const response = await axios.get('/api/tasks/' + props.id)
 
       setStartedAt(response.data.startedAt)
       setFinishedAt(response.data.finishedAt)
       setStatus(response.data.status)
+
+      if (
+        status !== response.data.status &&
+        response.data.status === 'running'
+      ) {
+        setIsCollapsed(false)
+      }
+
+      if (
+        status !== response.data.status &&
+        response.data.status === 'completed'
+      ) {
+        setIsCollapsed(true)
+      }
+    }
+
+    if (status === 'completed' || status === 'failed') {
+      return () => {
+        if (interval) {
+          clearInterval(interval)
+        }
+      }
     }
 
     interval = setInterval(fetchTask, 2000)

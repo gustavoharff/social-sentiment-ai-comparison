@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { pgTable, text, uuid } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 import { account, user } from '.'
 import { task } from './task'
@@ -7,6 +7,8 @@ import { task } from './task'
 export const pipeline = pgTable('pipelines', {
   id: uuid('id').primaryKey().defaultRandom(),
   pageId: text('page_id').notNull(),
+  title: text('title').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
   accountId: uuid('account_id')
     .notNull()
     .references(() => account.id, {
