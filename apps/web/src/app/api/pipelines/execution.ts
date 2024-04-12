@@ -1,10 +1,14 @@
 import { db } from '@vizo/drizzle'
-import { task } from '@vizo/drizzle/schema'
+import { comment, task } from '@vizo/drizzle/schema'
+import { FacebookSDK } from '@vizo/facebook-sdk'
 import { generateSasUrl, upload } from '@vizo/storage'
 import axios from 'axios'
 import { eq } from 'drizzle-orm'
 
 interface ExectionOptions {
+  pageId: string
+  accessToken: string
+  pipelineId: string
   commentsTaskId: string
   awsTaskId: string
   googleTaskId: string
@@ -12,7 +16,15 @@ interface ExectionOptions {
 }
 
 export async function execution(options: ExectionOptions) {
-  const { commentsTaskId, awsTaskId, googleTaskId, azureTaskId } = options
+  const {
+    pageId,
+    accessToken,
+    pipelineId,
+    commentsTaskId,
+    awsTaskId,
+    googleTaskId,
+    azureTaskId,
+  } = options
 
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
@@ -29,23 +41,113 @@ export async function execution(options: ExectionOptions) {
   const { data: commentsTaskFile } =
     await axios.get<object[]>(commentsTaskFileUrl)
 
-  for (let i = 0; i <= 6; i++) {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+  try {
+    const sdk = new FacebookSDK(accessToken)
 
-    commentsTaskFile.push({ type: 'text', content: `Comment ${i}` })
+    const posts = await sdk.posts().getPosts(pageId)
 
-    await upload({
-      blob: Buffer.from(JSON.stringify(commentsTaskFile)),
-      contentType: 'application/json',
-      length: JSON.stringify(commentsTaskFile).length,
-      name: `task-${commentsTaskId}`,
+    commentsTaskFile.push({
+      type: 'text',
+      content: 'ℹ Found ' + posts.length + ' posts',
     })
-  }
 
-  await db
-    .update(task)
-    .set({ status: 'completed', finishedAt: new Date() })
-    .where(eq(task.id, commentsTaskId))
+    for (const post of posts) {
+      commentsTaskFile.push({
+        type: 'text',
+        content: 'Fetching comments for post: ' + post.id,
+      })
+
+      await upload({
+        blob: Buffer.from(JSON.stringify(commentsTaskFile)),
+        contentType: 'application/json',
+        length: JSON.stringify(commentsTaskFile).length,
+        name: `task-${commentsTaskId}`,
+      })
+
+      const comments = await sdk.comments().getComments(post.id)
+
+      commentsTaskFile.push({
+        type: 'text',
+        content: 'ℹ Found ' + comments.length + ' comments',
+      })
+
+      for (const c of comments) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+
+        await upload({
+          blob: Buffer.from(JSON.stringify(commentsTaskFile)),
+          contentType: 'application/json',
+          length: JSON.stringify(commentsTaskFile).length,
+          name: `task-${commentsTaskId}`,
+        })
+
+        await db.insert(comment).values({
+          commentId: c.id,
+          pageId,
+          message: c.message,
+          publishedAt: new Date(c.created_time),
+          pipelineId,
+        })
+
+        commentsTaskFile.push({
+          type: 'text',
+          content: '✔ Saved comment: ' + c.id,
+        })
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+    }
+
+    await db
+      .update(task)
+      .set({ status: 'completed', finishedAt: new Date() })
+      .where(eq(task.id, commentsTaskId))
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error(error.response?.data)
+
+      commentsTaskFile.push({
+        type: 'text',
+        content: '✖ An error occurred while fetching posts',
+      })
+
+      await upload({
+        blob: Buffer.from(JSON.stringify(commentsTaskFile)),
+        contentType: 'application/json',
+        length: JSON.stringify(commentsTaskFile).length,
+        name: `task-${commentsTaskId}`,
+      })
+
+      await db
+        .update(task)
+        .set({ status: 'failed', finishedAt: new Date() })
+        .where(eq(task.id, commentsTaskId))
+    } else {
+      console.error(error)
+    }
+
+    await db
+      .update(task)
+      .set({ status: 'failed', finishedAt: new Date() })
+      .where(eq(task.id, commentsTaskId))
+
+    await db
+      .update(task)
+      .set({ status: 'cancelled' })
+      .where(eq(task.id, awsTaskId))
+
+    await db
+      .update(task)
+      .set({ status: 'cancelled' })
+      .where(eq(task.id, googleTaskId))
+
+    await db
+      .update(task)
+      .set({ status: 'cancelled' })
+      .where(eq(task.id, azureTaskId))
+
+    return
+  }
 
   await db
     .update(task)

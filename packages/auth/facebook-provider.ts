@@ -12,6 +12,7 @@ export const facebookProvider = FacebookProvider({
         'public_profile',
         'pages_show_list',
         'pages_read_engagement',
+        'pages_read_user_content',
         'business_management',
       ].join(','),
     },

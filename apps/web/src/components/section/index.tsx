@@ -5,6 +5,7 @@ import {
   ClockCircleOutlined,
   CloseCircleFilled,
   DownOutlined,
+  MinusCircleOutlined,
   RightOutlined,
   SettingOutlined,
 } from '@ant-design/icons'
@@ -22,7 +23,7 @@ interface SectionProps {
   fileUrl: string
   startedAt?: Date | null
   finishedAt?: Date | null
-  status: 'pending' | 'running' | 'completed' | 'failed'
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
 }
 
 type Line = {
@@ -66,6 +67,7 @@ export function Section(props: SectionProps) {
     failed: (
       <CloseCircleFilled className="text-base" style={{ color: red[500] }} />
     ),
+    cancelled: <MinusCircleOutlined className="text-base" />,
   }
 
   useEffect(() => {

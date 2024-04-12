@@ -1,0 +1,1 @@
+ALTER TYPE "tasks_status" ADD VALUE 'cancelled';

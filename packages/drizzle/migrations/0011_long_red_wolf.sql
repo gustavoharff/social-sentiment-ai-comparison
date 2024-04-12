@@ -1,0 +1,1 @@
+ALTER TABLE "comments" ADD COLUMN "comment_id" text NOT NULL;

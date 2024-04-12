@@ -57,6 +57,41 @@
       "when": 1711850815815,
       "tag": "0007_volatile_gauntlet",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1712882089870,
+      "tag": "0008_cooing_nighthawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1712882762072,
+      "tag": "0009_damp_whizzer",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1712882772838,
+      "tag": "0010_daffy_otto_octavius",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1712885914362,
+      "tag": "0011_long_red_wolf",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1712886310808,
+      "tag": "0012_majestic_sugar_man",
+      "breakpoints": true
     }
   ]
 }

@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
-import { account, user } from '.'
+import { account, comment, user } from '.'
 import { task } from './task'
 
 export const pipeline = pgTable('pipelines', {
@@ -30,4 +30,5 @@ export const pipelineRelations = relations(pipeline, ({ one, many }) => ({
     references: [user.id],
   }),
   tasks: many(task),
+  comments: many(comment),
 }))

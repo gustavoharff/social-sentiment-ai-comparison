@@ -1,4 +1,5 @@
 export * from './account'
+export * from './comment'
 export * from './pipeline'
 export * from './session'
 export * from './task'

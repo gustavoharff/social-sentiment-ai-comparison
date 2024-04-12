@@ -26,6 +26,7 @@ export async function GET() {
       return eq(fields.userId, session.user.id!)
     },
     with: {
+      comments: true,
       tasks: {
         orderBy(fields, { asc }) {
           return asc(fields.createdAt)
@@ -95,7 +96,12 @@ export async function POST(request: NextRequest) {
       })
       .returning()
 
-    const lines = [{ type: 'text', content: 'Hello, world!' }]
+    const lines = [
+      {
+        type: 'text',
+        content: 'Starting comments collection for page: ' + page.name,
+      },
+    ]
 
     const commentsTaskLogs = await upload({
       blob: Buffer.from(JSON.stringify(lines)),
@@ -182,6 +188,9 @@ export async function POST(request: NextRequest) {
     })
 
     execution({
+      pageId: page.id,
+      accessToken: page.access_token,
+      pipelineId,
       commentsTaskId: commentsTask.id,
       awsTaskId: awsTask.id,
       googleTaskId: googleTask.id,

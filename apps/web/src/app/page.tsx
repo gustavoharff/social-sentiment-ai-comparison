@@ -10,7 +10,7 @@ import {
   SettingOutlined,
 } from '@ant-design/icons'
 import { useQuery } from '@tanstack/react-query'
-import { pipeline, task } from '@vizo/drizzle/schema'
+import { comment, pipeline, task } from '@vizo/drizzle/schema'
 import { Button } from 'antd'
 import axios from 'axios'
 import classNames from 'classnames'
@@ -26,6 +26,7 @@ dayjs.extend(relativeTime)
 
 type Pipeline = typeof pipeline.$inferSelect & {
   tasks: (typeof task.$inferSelect)[]
+  comments: (typeof comment.$inferSelect)[]
 }
 
 export default function Home() {
@@ -42,14 +43,14 @@ export default function Home() {
 
   return (
     <div className="p-4">
-      <div className="">
+      <div>
         <span className="text-lg font-semibold">Análises recentes</span>
 
-        {data?.length === 0 && (
-          <span className="text-sm text-gray-400">Sem análises recentes</span>
-        )}
+        <div className="mt-2 max-w-screen-sm">
+          {data?.length === 0 && (
+            <span className="text-sm text-gray-400">Sem análises recentes</span>
+          )}
 
-        <div className="mt-2 max-w-72">
           {data?.map((pipeline) => {
             const isRunning = pipeline.tasks.some(
               (task) => task.status === 'running',
@@ -92,7 +93,14 @@ export default function Home() {
                   />
                 )}
 
-                <span>{pipeline.title}</span>
+                <span className="w-1/2">{pipeline.title}</span>
+
+                <span className="opacity-70">
+                  {pipeline.comments.length}{' '}
+                  {pipeline.comments.length === 1
+                    ? 'comentário'
+                    : 'comentários'}
+                </span>
 
                 <div className="ml-auto flex items-center gap-2">
                   <span className="opacity-80">
