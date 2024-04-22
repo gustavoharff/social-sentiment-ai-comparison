@@ -24,7 +24,7 @@
     "@vizo/eslint-config": "workspace:*",
     "@vizo/prettier": "workspace:*",
     "@vizo/tsconfig": "workspace:*",
-    "drizzle-kit": "^0.20.14",
+    "drizzle-kit": "^0.20.17",
     "pg": "8.11.3",
     "tsx": "4.7.1"
   },

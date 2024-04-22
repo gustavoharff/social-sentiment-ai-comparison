@@ -5,6 +5,7 @@ import Link from 'next/link'
 import logo from '@/assets/logo.svg'
 
 import { LogoutButton } from '../buttons/logout-button'
+import { ThemeToggle } from '../theme-toggle'
 
 export async function Header() {
   const session = await auth()
@@ -47,7 +48,11 @@ export async function Header() {
         <span className="font-semibold">{session.user.name}</span>
       </div>
 
-      <LogoutButton />
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
+
+        <LogoutButton />
+      </div>
     </div>
   )
 }
