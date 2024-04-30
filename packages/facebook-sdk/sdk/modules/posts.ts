@@ -20,7 +20,7 @@ export class PostsModule {
     const searchParams = new URLSearchParams({
       access_token: this.access_token,
       order: 'chronological',
-      since: dayjs().subtract(7, 'day').format('YYYY-MM-DD'),
+      since: dayjs().subtract(30, 'day').format('YYYY-MM-DD'),
       fields: 'id,message',
     })
 

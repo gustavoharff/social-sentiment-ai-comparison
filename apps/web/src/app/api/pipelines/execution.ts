@@ -5,6 +5,8 @@ import { generateSasUrl, upload } from '@vizo/storage'
 import axios from 'axios'
 import { eq } from 'drizzle-orm'
 
+import { LogSymbol } from '@/utils/log-symbol'
+
 interface ExectionOptions {
   pageId: string
   accessToken: string
@@ -48,7 +50,7 @@ export async function execution(options: ExectionOptions) {
 
     commentsTaskFile.push({
       type: 'text',
-      content: 'ℹ Found ' + posts.length + ' posts',
+      content: LogSymbol.INFO + ' Found ' + posts.length + ' posts',
     })
 
     for (const post of posts) {
@@ -68,7 +70,7 @@ export async function execution(options: ExectionOptions) {
 
       commentsTaskFile.push({
         type: 'text',
-        content: 'ℹ Found ' + comments.length + ' comments',
+        content: LogSymbol.INFO + ' Found ' + comments.length + ' comments',
       })
 
       for (const c of comments) {
@@ -91,7 +93,7 @@ export async function execution(options: ExectionOptions) {
 
         commentsTaskFile.push({
           type: 'text',
-          content: '✔ Saved comment: ' + c.id,
+          content: LogSymbol.SUCCESS + ' Saved comment: ' + c.id,
         })
       }
 
@@ -108,7 +110,7 @@ export async function execution(options: ExectionOptions) {
 
       commentsTaskFile.push({
         type: 'text',
-        content: '✖ An error occurred while fetching posts',
+        content: LogSymbol.ERROR + ' An error occurred while fetching posts',
       })
 
       await upload({
