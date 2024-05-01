@@ -22,6 +22,7 @@
     "@vizo/facebook-sdk": "workspace:^",
     "@vizo/storage": "workspace:*",
     "antd": "5.15.3",
+    "aws-sdk": "^2.1610.0",
     "axios": "^1.6.7",
     "classnames": "^2.5.1",
     "clsx": "^2.1.0",

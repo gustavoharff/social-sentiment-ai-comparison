@@ -1,5 +1,7 @@
+export * from './enums'
 export * from './account'
 export * from './comment'
+export * from './comment-sentiment'
 export * from './pipeline'
 export * from './session'
 export * from './task'

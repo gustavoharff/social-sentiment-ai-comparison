@@ -1,13 +1,9 @@
 import { relations } from 'drizzle-orm'
-import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
+import { commentSentiment } from './comment-sentiment'
+import { commentSentimentEnum } from './enums/comment-sentiment'
 import { pipeline } from './pipeline'
-
-export const commentSentimentEnum = pgEnum('comments_sentiment', [
-  'positive',
-  'negative',
-  'neutral',
-])
 
 export const comment = pgTable('comments', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -24,9 +20,10 @@ export const comment = pgTable('comments', {
     }),
 })
 
-export const commentRelations = relations(comment, ({ one }) => ({
+export const commentRelations = relations(comment, ({ one, many }) => ({
   pipeline: one(pipeline, {
     fields: [comment.pipelineId],
     references: [pipeline.id],
   }),
+  sentiments: many(commentSentiment),
 }))

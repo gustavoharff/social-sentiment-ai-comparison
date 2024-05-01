@@ -13,6 +13,8 @@ export const env = createEnv({
     FACEBOOK_CLIENT_SECRET: z.string().min(1),
     AZURE_STORAGE_CONNECTION_STRING: z.string().min(1),
     AZURE_STORAGE_CONTAINER_NAME: z.string().min(1),
+    AWS_ACCESS_KEY_ID: z.string().min(1),
+    AWS_SECRET_ACCESS_KEY: z.string().min(1),
   },
   client: {
     // NEXT_PUBLIC_VERCEL_URL: z.string().url().min(1),
@@ -34,6 +36,8 @@ export const env = createEnv({
     AZURE_STORAGE_CONNECTION_STRING:
       process.env.AZURE_STORAGE_CONNECTION_STRING,
     AZURE_STORAGE_CONTAINER_NAME: process.env.AZURE_STORAGE_CONTAINER_NAME,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   },
   emptyStringAsUndefined: true,
 })

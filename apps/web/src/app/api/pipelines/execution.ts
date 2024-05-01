@@ -1,7 +1,9 @@
 import { db } from '@vizo/drizzle'
-import { comment, task } from '@vizo/drizzle/schema'
+import { comment, commentSentiment, task } from '@vizo/drizzle/schema'
+import { env } from '@vizo/env'
 import { FacebookSDK } from '@vizo/facebook-sdk'
 import { generateSasUrl, upload } from '@vizo/storage'
+import { Comprehend } from 'aws-sdk'
 import axios from 'axios'
 import { eq } from 'drizzle-orm'
 
@@ -165,12 +167,58 @@ export async function execution(options: ExectionOptions) {
 
   await new Promise((resolve) => setTimeout(resolve, 1000))
 
-  for (let i = 0; i <= 3; i++) {
+  const comprehend = new Comprehend({
+    region: 'us-east-1',
+    credentials: {
+      accessKeyId: env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+    },
+  })
+
+  const comments = await db.query.comment.findMany({
+    where(fields, { eq }) {
+      return eq(fields.pipelineId, pipelineId)
+    },
+  })
+
+  for (const c of comments) {
+    const index = comments.indexOf(c) + 1
+
+    const percentage = (index / comments.length) * 100
+
     await new Promise((resolve) => setTimeout(resolve, 1000))
 
-    const percentage = (i / 3) * 100
+    const analysis = await comprehend
+      .detectSentiment({
+        LanguageCode: 'pt',
+        Text: c.message,
+      })
+      .promise()
 
-    awsTaskFile.push({ type: 'text', content: `Processing ${percentage}%...` })
+    const status = {
+      positive: LogSymbol.SUCCESS,
+      negative: LogSymbol.ERROR,
+      neutral: LogSymbol.INFO,
+      mixed: LogSymbol.WARNING,
+    }
+
+    const sentiment = analysis.Sentiment?.toLowerCase() as
+      | 'positive'
+      | 'negative'
+      | 'neutral'
+      | 'mixed'
+
+    await db.insert(commentSentiment).values({
+      commentId: c.id,
+      sentiment,
+      provider: 'aws',
+    })
+
+    awsTaskFile.push({
+      type: 'text',
+      content:
+        percentage + '% ' + status[sentiment] + ` ${sentiment} - ${c.id}`,
+    })
 
     await upload({
       blob: Buffer.from(JSON.stringify(awsTaskFile)),
