@@ -10,6 +10,12 @@ import colors from 'tailwindcss/colors'
 
 type Comment = typeof comment.$inferSelect
 
+type Data = {
+  id: string
+  name: string
+  value: number
+}
+
 export default function Report() {
   const { id } = useParams()
 
@@ -79,7 +85,7 @@ export default function Report() {
         innerRadius={0.6}
         style={{
           lineWidth: 3,
-          stroke: (data) => {
+          stroke: (data: Data) => {
             const tone = resolvedTheme === 'dark' ? 800 : 200
 
             if (data.id === 'positive') {
@@ -96,7 +102,7 @@ export default function Report() {
           },
           inset: 2,
           radius: 10,
-          fill: (data) => {
+          fill: (data: Data) => {
             const tone = resolvedTheme === 'dark' ? 400 : 600
 
             if (data.id === 'positive') {
@@ -113,7 +119,7 @@ export default function Report() {
           },
         }}
         label={{
-          text: (data) => {
+          text: (data: Data) => {
             const percentage = data.value.toFixed(0) + '%'
 
             return data.name + '\n' + percentage
@@ -122,7 +128,7 @@ export default function Report() {
             fontSize: 14,
             fontWeight: '600',
           },
-          fill: (data) => {
+          fill: (data: Data) => {
             const tone = resolvedTheme === 'dark' ? 800 : 200
 
             if (data.id === 'positive') {
@@ -154,53 +160,6 @@ export default function Report() {
           },
         ]}
       />
-
-      {/* <Chart
-        type="donut"
-        // width="100%"
-        // height={76}
-        series={[50, 50]}
-        options={{
-          theme: {
-            mode: resolvedTheme === 'dark' ? 'dark' : 'light',
-          },
-          labels: ['Positive', 'Negative'],
-          plotOptions: {
-            pie: {
-              donut: {
-                labels: {
-                  show: true,
-                  total: {
-                    show: true,
-                    formatter: () => '120 comentários',
-                    fontWeight: 'bold',
-                  },
-                  value: {
-                    show: false,
-                  },
-                },
-              },
-            },
-          },
-          tooltip: {
-            enabled: false,
-          },
-          legend: {
-            show: false,
-          },
-          stroke: {
-            dashArray: 4,
-            curve: 'straight',
-            width: 10,
-            lineCap: 'butt',
-          },
-          colors: [emerald[500], rose[500]],
-          // series: [44, 55, 41, 17, 15],
-          // chart: {
-          // type: 'donut',
-          // },
-        }}
-      /> */}
     </div>
   )
 }
