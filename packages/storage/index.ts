@@ -30,13 +30,6 @@ export async function upload(options: UploadOptions) {
       blobContentType: options.contentType,
     },
   })
-
-  const sas = await generateSasUrl({
-    name: options.name,
-    contentType: options.contentType,
-  })
-
-  return sas
 }
 
 interface GenerateSasUrlOptions {

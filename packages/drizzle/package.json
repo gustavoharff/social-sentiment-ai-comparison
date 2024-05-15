@@ -9,6 +9,7 @@
     "db:migrate": "pnpm env:load tsx migrate.ts",
     "db:studio": "pnpm env:load drizzle-kit studio",
     "db:seed": "pnpm env:load tsx ./seed.ts",
+    "db:dbml": "pnpm env:load tsx ./dbml.ts",
     "lint": "eslint .",
     "env:load": "dotenv -e ../../.env --"
   },
@@ -21,9 +22,11 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@softwaretechnik/dbml-renderer": "^1.0.30",
     "@vizo/eslint-config": "workspace:*",
     "@vizo/prettier": "workspace:*",
     "@vizo/tsconfig": "workspace:*",
+    "drizzle-dbml-generator": "^0.6.1",
     "drizzle-kit": "^0.20.17",
     "pg": "8.11.3",
     "tsx": "4.7.1"

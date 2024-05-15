@@ -3,13 +3,13 @@ import { db } from '@vizo/drizzle'
 import { pipeline, task } from '@vizo/drizzle/schema'
 import { env } from '@vizo/env'
 import { FacebookSDK } from '@vizo/facebook-sdk'
-import { upload } from '@vizo/storage'
 import axios from 'axios'
 import { eq } from 'drizzle-orm'
 import { NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
 import { execution } from './execution'
+import { TaskFile } from './task-file'
 
 export async function GET() {
   const session = await auth()
@@ -96,23 +96,22 @@ export async function POST(request: NextRequest) {
       })
       .returning()
 
-    const lines = [
-      {
-        type: 'text',
-        content: 'Starting comments collection for page: ' + page.name,
-      },
-    ]
+    const commentsTaskFile = new TaskFile(commentsTask.id)
 
-    const commentsTaskLogs = await upload({
-      blob: Buffer.from(JSON.stringify(lines)),
-      contentType: 'application/json',
-      length: JSON.stringify(lines).length,
-      name: `task-${commentsTask.id}`,
+    await commentsTaskFile.create()
+
+    commentsTaskFile.addLine({
+      type: 'text',
+      content: 'Starting comments collection for page: ' + page.name,
     })
+
+    await commentsTaskFile.save()
+
+    const commentsTaskFileUrl = await commentsTaskFile.generateSasUrl()
 
     await db
       .update(task)
-      .set({ fileUrl: commentsTaskLogs })
+      .set({ fileUrl: commentsTaskFileUrl })
       .where(eq(task.id, commentsTask.id))
 
     const [awsTask] = await db
@@ -124,16 +123,22 @@ export async function POST(request: NextRequest) {
       })
       .returning()
 
-    const awsTaskLogs = await upload({
-      blob: Buffer.from(JSON.stringify([])),
-      contentType: 'application/json',
-      length: JSON.stringify([]).length,
-      name: `task-${awsTask.id}`,
+    const awsTaskFile = new TaskFile(awsTask.id)
+
+    await awsTaskFile.create()
+
+    awsTaskFile.addLine({
+      type: 'text',
+      content: 'Starting AWS analysis for page: ' + page.name,
     })
+
+    await awsTaskFile.save()
+
+    const awsTaskFileUrl = await awsTaskFile.generateSasUrl()
 
     await db
       .update(task)
-      .set({ fileUrl: awsTaskLogs })
+      .set({ fileUrl: awsTaskFileUrl })
       .where(eq(task.id, awsTask.id))
 
     const [googleTask] = await db
@@ -145,16 +150,22 @@ export async function POST(request: NextRequest) {
       })
       .returning()
 
-    const googleTaskLogs = await upload({
-      blob: Buffer.from(JSON.stringify([])),
-      contentType: 'application/json',
-      length: JSON.stringify([]).length,
-      name: `task-${googleTask.id}`,
+    const googleTaskFile = new TaskFile(googleTask.id)
+
+    await googleTaskFile.create()
+
+    googleTaskFile.addLine({
+      type: 'text',
+      content: 'Starting Google analysis for page: ' + page.name,
     })
+
+    await googleTaskFile.save()
+
+    const googleTaskFileUrl = await googleTaskFile.generateSasUrl()
 
     await db
       .update(task)
-      .set({ fileUrl: googleTaskLogs })
+      .set({ fileUrl: googleTaskFileUrl })
       .where(eq(task.id, googleTask.id))
 
     const [azureTask] = await db
@@ -166,16 +177,22 @@ export async function POST(request: NextRequest) {
       })
       .returning()
 
-    const azureTaskLogs = await upload({
-      blob: Buffer.from(JSON.stringify([])),
-      contentType: 'application/json',
-      length: JSON.stringify([]).length,
-      name: `task-${azureTask.id}`,
+    const azureTaskFile = new TaskFile(azureTask.id)
+
+    await azureTaskFile.create()
+
+    azureTaskFile.addLine({
+      type: 'text',
+      content: 'Starting Azure analysis for page: ' + page.name,
     })
+
+    await azureTaskFile.save()
+
+    const azureTaskFileUrl = await azureTaskFile.generateSasUrl()
 
     await db
       .update(task)
-      .set({ fileUrl: azureTaskLogs })
+      .set({ fileUrl: azureTaskFileUrl })
       .where(eq(task.id, azureTask.id))
 
     const drizzlePipeline = await db.query.pipeline.findFirst({

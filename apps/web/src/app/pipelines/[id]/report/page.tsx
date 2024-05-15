@@ -51,21 +51,25 @@ export default function Report() {
 
     const total = counts.positive + counts.negative + counts.neutral
 
+    const positivePercentage = (counts.positive / total) * 100
+    const negativePercentage = (counts.negative / total) * 100
+    const neutralPercentage = (counts.neutral / total) * 100
+
     return [
       {
         id: 'positive',
         name: 'Positive',
-        value: (counts.positive / total) * 100,
+        value: Number.isNaN(positivePercentage) ? 0 : positivePercentage,
       },
       {
         id: 'negative',
         name: 'Negative',
-        value: (counts.negative / total) * 100,
+        value: Number.isNaN(negativePercentage) ? 0 : negativePercentage,
       },
       {
         id: 'neutral',
         name: 'Neutral',
-        value: (counts.neutral / total) * 100,
+        value: Number.isNaN(neutralPercentage) ? 0 : neutralPercentage,
       },
     ]
   }, [comments])
