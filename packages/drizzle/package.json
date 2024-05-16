@@ -27,7 +27,7 @@
     "@vizo/prettier": "workspace:*",
     "@vizo/tsconfig": "workspace:*",
     "drizzle-dbml-generator": "^0.6.1",
-    "drizzle-kit": "^0.20.17",
+    "drizzle-kit": "^0.21.2",
     "pg": "8.11.3",
     "tsx": "4.7.1"
   },
