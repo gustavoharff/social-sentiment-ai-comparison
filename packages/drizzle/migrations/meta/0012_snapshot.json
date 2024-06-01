@@ -1,10 +1,8 @@
 {
-  "id": "02a26aba-787a-4bc5-9c34-b11d7c3e238a",
-  "prevId": "9695deb3-a6b5-4400-856c-bec34420870a",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "accounts": {
+    "public.accounts": {
       "name": "accounts",
       "schema": "",
       "columns": {
@@ -96,21 +94,21 @@
         "accounts_user_id_users_id_fk": {
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "comments": {
+    "public.comments": {
       "name": "comments",
       "schema": "",
       "columns": {
@@ -163,21 +161,21 @@
         "comments_pipeline_id_pipelines_id_fk": {
           "name": "comments_pipeline_id_pipelines_id_fk",
           "tableFrom": "comments",
-          "tableTo": "pipelines",
           "columnsFrom": [
             "pipeline_id"
           ],
+          "tableTo": "pipelines",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "pipelines": {
+    "public.pipelines": {
       "name": "pipelines",
       "schema": "",
       "columns": {
@@ -225,34 +223,34 @@
         "pipelines_account_id_accounts_id_fk": {
           "name": "pipelines_account_id_accounts_id_fk",
           "tableFrom": "pipelines",
-          "tableTo": "accounts",
           "columnsFrom": [
             "account_id"
           ],
+          "tableTo": "accounts",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         },
         "pipelines_user_id_users_id_fk": {
           "name": "pipelines_user_id_users_id_fk",
           "tableFrom": "pipelines",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "sessions": {
+    "public.sessions": {
       "name": "sessions",
       "schema": "",
       "columns": {
@@ -280,21 +278,21 @@
         "sessions_user_id_users_id_fk": {
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "tasks": {
+    "public.tasks": {
       "name": "tasks",
       "schema": "",
       "columns": {
@@ -361,21 +359,21 @@
         "tasks_pipeline_id_pipelines_id_fk": {
           "name": "tasks_pipeline_id_pipelines_id_fk",
           "tableFrom": "tasks",
-          "tableTo": "pipelines",
           "columnsFrom": [
             "pipeline_id"
           ],
+          "tableTo": "pipelines",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -426,38 +424,43 @@
     }
   },
   "enums": {
-    "comments_sentiment": {
+    "public.comments_sentiment": {
       "name": "comments_sentiment",
-      "values": {
-        "positive": "positive",
-        "negative": "negative",
-        "neutral": "neutral"
-      }
+      "schema": "public",
+      "values": [
+        "positive",
+        "negative",
+        "neutral"
+      ]
     },
-    "tasks_status": {
+    "public.tasks_status": {
       "name": "tasks_status",
-      "values": {
-        "pending": "pending",
-        "running": "running",
-        "completed": "completed",
-        "failed": "failed",
-        "cancelled": "cancelled"
-      }
+      "schema": "public",
+      "values": [
+        "pending",
+        "running",
+        "completed",
+        "failed",
+        "cancelled"
+      ]
     },
-    "tasks_type": {
+    "public.tasks_type": {
       "name": "tasks_type",
-      "values": {
-        "comments-collection": "comments-collection",
-        "aws-analysis": "aws-analysis",
-        "google-analysis": "google-analysis",
-        "azure-analysis": "azure-analysis"
-      }
+      "schema": "public",
+      "values": [
+        "comments-collection",
+        "aws-analysis",
+        "google-analysis",
+        "azure-analysis"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "02a26aba-787a-4bc5-9c34-b11d7c3e238a",
+  "prevId": "9695deb3-a6b5-4400-856c-bec34420870a"
 }

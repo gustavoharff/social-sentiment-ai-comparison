@@ -1,10 +1,8 @@
 {
-  "id": "619e3865-6c59-4f90-93cb-8e476ff2fd96",
-  "prevId": "66b90c1a-fa27-4d37-8a82-f06943fb00af",
-  "version": "5",
-  "dialect": "pg",
+  "version": "6",
+  "dialect": "postgresql",
   "tables": {
-    "accounts": {
+    "public.accounts": {
       "name": "accounts",
       "schema": "",
       "columns": {
@@ -96,21 +94,21 @@
         "accounts_user_id_users_id_fk": {
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "pipelines": {
+    "public.pipelines": {
       "name": "pipelines",
       "schema": "",
       "columns": {
@@ -145,34 +143,34 @@
         "pipelines_account_id_accounts_id_fk": {
           "name": "pipelines_account_id_accounts_id_fk",
           "tableFrom": "pipelines",
-          "tableTo": "accounts",
           "columnsFrom": [
             "account_id"
           ],
+          "tableTo": "accounts",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         },
         "pipelines_user_id_users_id_fk": {
           "name": "pipelines_user_id_users_id_fk",
           "tableFrom": "pipelines",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "sessions": {
+    "public.sessions": {
       "name": "sessions",
       "schema": "",
       "columns": {
@@ -200,21 +198,21 @@
         "sessions_user_id_users_id_fk": {
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
-          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
+          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "tasks": {
+    "public.tasks": {
       "name": "tasks",
       "schema": "",
       "columns": {
@@ -256,21 +254,21 @@
         "tasks_pipeline_id_pipelines_id_fk": {
           "name": "tasks_pipeline_id_pipelines_id_fk",
           "tableFrom": "tasks",
-          "tableTo": "pipelines",
           "columnsFrom": [
             "pipeline_id"
           ],
+          "tableTo": "pipelines",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "cascade"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "users": {
+    "public.users": {
       "name": "users",
       "schema": "",
       "columns": {
@@ -321,20 +319,23 @@
     }
   },
   "enums": {
-    "tasks_status": {
+    "public.tasks_status": {
       "name": "tasks_status",
-      "values": {
-        "pending": "pending",
-        "running": "running",
-        "completed": "completed",
-        "failed": "failed"
-      }
+      "schema": "public",
+      "values": [
+        "pending",
+        "running",
+        "completed",
+        "failed"
+      ]
     }
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "619e3865-6c59-4f90-93cb-8e476ff2fd96",
+  "prevId": "66b90c1a-fa27-4d37-8a82-f06943fb00af"
 }

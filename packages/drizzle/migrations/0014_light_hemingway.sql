@@ -1,0 +1,1 @@
+ALTER TYPE "tasks_type" ADD VALUE 'promote-sentiments';

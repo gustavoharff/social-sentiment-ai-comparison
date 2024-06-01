@@ -1,4 +1,6 @@
 {
+  "id": "1cc35726-d606-4f06-9156-f691988aea6d",
+  "prevId": "447bf17f-6738-498e-8590-acae188f731e",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -94,15 +96,15 @@
         "accounts_user_id_users_id_fk": {
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -119,6 +121,12 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
+        "comment_id": {
+          "name": "comment_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "page_id": {
           "name": "page_id",
           "type": "text",
@@ -134,6 +142,7 @@
         "sentiment": {
           "name": "sentiment",
           "type": "comments_sentiment",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -142,10 +151,81 @@
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
+        },
+        "pipeline_id": {
+          "name": "pipeline_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "comments_pipeline_id_pipelines_id_fk": {
+          "name": "comments_pipeline_id_pipelines_id_fk",
+          "tableFrom": "comments",
+          "tableTo": "pipelines",
+          "columnsFrom": [
+            "pipeline_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.comments_sentiments": {
+      "name": "comments_sentiments",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "provider": {
+          "name": "provider",
+          "type": "sentiments_providers",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sentiment": {
+          "name": "sentiment",
+          "type": "comments_sentiment",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "comment_id": {
+          "name": "comment_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "comments_sentiments_comment_id_comments_id_fk": {
+          "name": "comments_sentiments_comment_id_comments_id_fk",
+          "tableFrom": "comments_sentiments",
+          "tableTo": "comments",
+          "columnsFrom": [
+            "comment_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -197,28 +277,28 @@
         "pipelines_account_id_accounts_id_fk": {
           "name": "pipelines_account_id_accounts_id_fk",
           "tableFrom": "pipelines",
+          "tableTo": "accounts",
           "columnsFrom": [
             "account_id"
           ],
-          "tableTo": "accounts",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         },
         "pipelines_user_id_users_id_fk": {
           "name": "pipelines_user_id_users_id_fk",
           "tableFrom": "pipelines",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -252,15 +332,15 @@
         "sessions_user_id_users_id_fk": {
           "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
-          "tableTo": "users",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -286,12 +366,14 @@
         "type": {
           "name": "type",
           "type": "tasks_type",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
         "status": {
           "name": "status",
           "type": "tasks_status",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true,
           "default": "'pending'"
@@ -333,15 +415,15 @@
         "tasks_pipeline_id_pipelines_id_fk": {
           "name": "tasks_pipeline_id_pipelines_id_fk",
           "tableFrom": "tasks",
+          "tableTo": "pipelines",
           "columnsFrom": [
             "pipeline_id"
           ],
-          "tableTo": "pipelines",
           "columnsTo": [
             "id"
           ],
-          "onUpdate": "cascade",
-          "onDelete": "cascade"
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
         }
       },
       "compositePrimaryKeys": {},
@@ -404,7 +486,17 @@
       "values": [
         "positive",
         "negative",
-        "neutral"
+        "neutral",
+        "mixed"
+      ]
+    },
+    "public.sentiments_providers": {
+      "name": "sentiments_providers",
+      "schema": "public",
+      "values": [
+        "aws",
+        "google",
+        "azure"
       ]
     },
     "public.tasks_status": {
@@ -414,7 +506,8 @@
         "pending",
         "running",
         "completed",
-        "failed"
+        "failed",
+        "cancelled"
       ]
     },
     "public.tasks_type": {
@@ -424,16 +517,15 @@
         "comments-collection",
         "aws-analysis",
         "google-analysis",
-        "azure-analysis"
+        "azure-analysis",
+        "promote-sentiments"
       ]
     }
   },
   "schemas": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
-  },
-  "id": "49928ebb-c7c7-43bf-87c7-63d88d6e4ceb",
-  "prevId": "912bb46a-6781-421e-a38e-fc848d802cd3"
+    "tables": {}
+  }
 }

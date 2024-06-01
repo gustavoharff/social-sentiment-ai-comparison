@@ -5,9 +5,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "db:generate": "pnpm env:load drizzle-kit generate:pg",
+    "db:generate": "pnpm env:load drizzle-kit generate",
     "db:migrate": "pnpm env:load tsx migrate.ts",
     "db:studio": "pnpm env:load drizzle-kit studio",
+    "db:up": "pnpm env:load drizzle-kit up",
     "db:seed": "pnpm env:load tsx ./seed.ts",
     "db:dbml": "pnpm env:load tsx ./dbml.ts",
     "lint": "eslint .",

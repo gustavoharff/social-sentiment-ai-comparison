@@ -195,6 +195,34 @@ export async function POST(request: NextRequest) {
       .set({ fileUrl: azureTaskFileUrl })
       .where(eq(task.id, azureTask.id))
 
+    const [promoteSentimentsTask] = await db
+      .insert(task)
+      .values({
+        name: 'Promote sentiments',
+        type: 'promote-sentiments',
+        pipelineId,
+      })
+      .returning()
+
+    const promoteSentimentsTaskFile = new TaskFile(promoteSentimentsTask.id)
+
+    await promoteSentimentsTaskFile.create()
+
+    promoteSentimentsTaskFile.addLine({
+      type: 'text',
+      content: 'Starting Azure analysis for page: ' + page.name,
+    })
+
+    await promoteSentimentsTaskFile.save()
+
+    const promoteSentimentsTaskFileUrl =
+      await promoteSentimentsTaskFile.generateSasUrl()
+
+    await db
+      .update(task)
+      .set({ fileUrl: promoteSentimentsTaskFileUrl })
+      .where(eq(task.id, promoteSentimentsTask.id))
+
     const drizzlePipeline = await db.query.pipeline.findFirst({
       where(fields, { eq }) {
         return eq(fields.id, pipelineId)
@@ -212,6 +240,7 @@ export async function POST(request: NextRequest) {
       awsTaskId: awsTask.id,
       googleTaskId: googleTask.id,
       azureTaskId: azureTask.id,
+      promoteSentimentsTaskId: promoteSentimentsTask.id,
     })
 
     return NextResponse.json(drizzlePipeline)

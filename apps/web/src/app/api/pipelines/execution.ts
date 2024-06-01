@@ -6,6 +6,7 @@ import { awsTask } from './tasks/aws-task'
 import { azureTask } from './tasks/azure-task'
 import { facebookTask } from './tasks/facebook-task'
 import { googleTask } from './tasks/google-task'
+import { promoteSentimentsTask } from './tasks/promote-sentiments-task'
 
 interface ExectionOptions {
   pageId: string
@@ -15,6 +16,7 @@ interface ExectionOptions {
   awsTaskId: string
   googleTaskId: string
   azureTaskId: string
+  promoteSentimentsTaskId: string
 }
 
 export async function execution(options: ExectionOptions) {
@@ -26,6 +28,7 @@ export async function execution(options: ExectionOptions) {
     awsTaskId,
     googleTaskId,
     azureTaskId,
+    promoteSentimentsTaskId,
   } = options
 
   await facebookTask({
@@ -101,6 +104,22 @@ export async function execution(options: ExectionOptions) {
         .update(task)
         .set({ status: 'failed' })
         .where(eq(task.id, azureTaskId))
+
+      await db
+        .update(task)
+        .set({ status: 'cancelled' })
+        .where(eq(task.id, promoteSentimentsTaskId))
+    },
+  })
+
+  await promoteSentimentsTask({
+    pipelineId,
+    taskId: promoteSentimentsTaskId,
+    onFailed: async () => {
+      await db
+        .update(task)
+        .set({ status: 'failed' })
+        .where(eq(task.id, promoteSentimentsTaskId))
     },
   })
 }

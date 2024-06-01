@@ -1,23 +1,22 @@
-import language from '@google-cloud/language'
 import { db } from '@vizo/drizzle'
-import { commentSentiment, task } from '@vizo/drizzle/schema'
+import { comment, task } from '@vizo/drizzle/schema'
 import { eq } from 'drizzle-orm'
 
 import { LogSymbol } from '@/utils/log-symbol'
 
 import { TaskFile } from '../task-file'
 
-interface GoogleTaskOptions {
+interface PromoteSentimentsTaskOptions {
   taskId: string
   pipelineId: string
   onFailed: () => void | Promise<void>
 }
 
-export async function googleTask({
+export async function promoteSentimentsTask({
   taskId,
   pipelineId,
   onFailed,
-}: GoogleTaskOptions) {
+}: PromoteSentimentsTaskOptions) {
   const taskFile = new TaskFile(taskId)
 
   try {
@@ -26,62 +25,53 @@ export async function googleTask({
       .set({ status: 'running', startedAt: new Date() })
       .where(eq(task.id, taskId))
 
-    const client = new language.LanguageServiceClient()
-
     const comments = await db.query.comment.findMany({
       where(fields, { eq }) {
         return eq(fields.pipelineId, pipelineId)
       },
+      with: {
+        sentiments: true,
+      },
     })
 
     for (const c of comments) {
-      const [result] = await client.analyzeSentiment({
-        document: {
-          content: c.message,
-          type: 'PLAIN_TEXT',
-        },
-      })
+      const positiveCount = c.sentiments.filter(
+        (s) => s.sentiment === 'positive',
+      ).length
+      const negativeCount = c.sentiments.filter(
+        (s) => s.sentiment === 'negative',
+      ).length
+      const neutralCount = c.sentiments.filter(
+        (s) => s.sentiment === 'neutral',
+      ).length
+      const mixedCount = c.sentiments.filter(
+        (s) => s.sentiment === 'mixed',
+      ).length
 
-      const sentiment: 'positive' | 'negative' | 'neutral' | 'mixed' = (() => {
-        const positiveThreshold = 0.25
-        const negativeThreshold = -0.25
-        const highMagnitudeThreshold = 2.0
+      const total = c.sentiments.length
 
-        const { score, magnitude } = result.documentSentiment || {}
+      const positivePercentage = (positiveCount / total) * 100
+      const negativePercentage = (negativeCount / total) * 100
+      const neutralPercentage = (neutralCount / total) * 100
+      const mixedPercentage = (mixedCount / total) * 100
 
-        if (
-          score === null ||
-          score === undefined ||
-          magnitude === null ||
-          magnitude === undefined
-        ) {
-          return 'neutral'
-        }
-
-        if (score > positiveThreshold && magnitude >= highMagnitudeThreshold) {
+      const sentiment = (() => {
+        if (positivePercentage > 50) {
           return 'positive'
         }
 
-        if (score < negativeThreshold && magnitude >= highMagnitudeThreshold) {
+        if (negativePercentage > 50) {
           return 'negative'
         }
 
-        if (Math.abs(score) <= 0.1 && magnitude < highMagnitudeThreshold) {
-          return 'neutral'
-        }
-
-        if (Math.abs(score) <= 0.1 && magnitude >= highMagnitudeThreshold) {
+        if (mixedPercentage > 50) {
           return 'mixed'
         }
 
         return 'neutral'
       })()
 
-      await db.insert(commentSentiment).values({
-        commentId: c.id,
-        sentiment,
-        provider: 'google',
-      })
+      await db.update(comment).set({ sentiment }).where(eq(comment.id, c.id))
 
       taskFile.addLine({
         type: 'text',
@@ -95,12 +85,22 @@ export async function googleTask({
 
       taskFile.addLine({
         type: 'text',
-        content: `Score: ${result.documentSentiment?.score}`,
+        content: `Positive: ${positivePercentage}%`,
       })
 
       taskFile.addLine({
         type: 'text',
-        content: `Magnitude: ${result.documentSentiment?.magnitude}`,
+        content: `Negative: ${negativePercentage}%`,
+      })
+
+      taskFile.addLine({
+        type: 'text',
+        content: `Neutral: ${neutralPercentage}%`,
+      })
+
+      taskFile.addLine({
+        type: 'text',
+        content: `Mixed: ${mixedPercentage}%`,
       })
 
       taskFile.addLine({

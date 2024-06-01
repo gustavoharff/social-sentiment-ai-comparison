@@ -1,0 +1,116 @@
+enum comments_sentiment {
+  positive
+  negative
+  neutral
+  mixed
+}
+
+enum sentiments_providers {
+  aws
+  google
+  azure
+}
+
+enum tasks_status {
+  pending
+  running
+  completed
+  failed
+  cancelled
+}
+
+enum tasks_type {
+  "comments-collection"
+  "aws-analysis"
+  "google-analysis"
+  "azure-analysis"
+}
+
+table accounts {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  user_id uuid [not null]
+  type text [not null]
+  provider text [not null]
+  provider_account_id text [not null]
+  scope text
+  access_token text
+  expires_at integer
+  id_token text
+  refresh_token text
+  session_state text
+  token_type text
+
+  indexes {
+    (provider, provider_account_id)
+  }
+}
+
+table comments {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  comment_id text [not null]
+  page_id text [not null]
+  title text [not null]
+  sentiment comments_sentiment
+  published_at timestamp [not null]
+  pipeline_id uuid [not null]
+}
+
+table comments_sentiments {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  provider sentiments_providers [not null]
+  sentiment comments_sentiment [not null]
+  comment_id uuid [not null]
+}
+
+table pipelines {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  page_id text [not null]
+  title text [not null]
+  created_at timestamp [not null, default: `now()`]
+  account_id uuid [not null]
+  user_id uuid [not null]
+}
+
+table sessions {
+  session_token text [pk, not null]
+  user_id uuid [not null]
+  expires timestamp [not null]
+}
+
+table tasks {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  name text [not null]
+  type tasks_type [not null]
+  status tasks_status [not null, default: 'pending']
+  file_url text
+  created_at timestamp [default: `now()`]
+  started_at timestamp
+  finished_at timestamp
+  pipeline_id uuid [not null]
+}
+
+table users {
+  id uuid [pk, not null, default: `gen_random_uuid()`]
+  name text
+  email text [not null]
+  email_verified timestamp
+  image text
+
+  indexes {
+    email
+  }
+}
+
+ref: accounts.user_id > users.id
+
+ref: comments.pipeline_id > pipelines.id
+
+ref: comments_sentiments.comment_id > comments.id
+
+ref: pipelines.account_id > accounts.id
+
+ref: pipelines.user_id > users.id
+
+ref: sessions.user_id > users.id
+
+ref: tasks.pipeline_id > pipelines.id

@@ -16,6 +16,7 @@ export const taskType = pgEnum('tasks_type', [
   'aws-analysis',
   'google-analysis',
   'azure-analysis',
+  'promote-sentiments',
 ])
 
 export const task = pgTable('tasks', {

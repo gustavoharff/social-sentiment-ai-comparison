@@ -19,6 +19,9 @@ export async function GET(
     where(fields, { eq }) {
       return eq(fields.pipelineId, params.id)
     },
+    with: {
+      sentiments: true,
+    },
   })
 
   return NextResponse.json(comments)
