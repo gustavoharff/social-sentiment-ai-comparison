@@ -2,6 +2,7 @@
 
 import { Pie } from '@ant-design/charts'
 import { comment } from '@vizo/drizzle/schema'
+import { Table } from 'antd'
 import axios from 'axios'
 import { useParams } from 'next/navigation'
 import { useTheme } from 'next-themes'
@@ -126,6 +127,10 @@ export default function Report() {
           text: (data: Data) => {
             const percentage = data.value.toFixed(0) + '%'
 
+            if (percentage === '0%') {
+              return ''
+            }
+
             return data.name + '\n' + percentage
           },
           style: {
@@ -153,7 +158,7 @@ export default function Report() {
             type: 'text',
             tooltip: false,
             style: {
-              text: '120\ncomments',
+              text: comments.length + '\ncomments',
               x: '50%',
               y: '50%',
               textAlign: 'center',
@@ -164,6 +169,110 @@ export default function Report() {
           },
         ]}
       />
+
+      <Table dataSource={comments} rowKey="id" pagination={false}>
+        <Table.Column<Comment> title="Comment" dataIndex="message" key="text" />
+
+        <Table.Column<Comment>
+          title="Comprehend"
+          dataIndex="sentiments"
+          key="aws-sentiment"
+          render={(value) => {
+            const sentiment = value.find(
+              (sentiment: any) => sentiment.provider === 'aws',
+            )?.sentiment
+
+            if (sentiment === 'positive') {
+              return <span className="text-green-500">Positive</span>
+            }
+
+            if (sentiment === 'negative') {
+              return <span className="text-red-500">Negative</span>
+            }
+
+            if (sentiment === 'neutral') {
+              return <span className="text-gray-500">Neutral</span>
+            }
+          }}
+        />
+
+        <Table.Column<Comment>
+          title="Cloud Natural Language"
+          dataIndex="sentiments"
+          key="google-sentiment"
+          render={(value) => {
+            const sentiment = value.find(
+              (sentiment: any) => sentiment.provider === 'google',
+            )?.sentiment
+
+            if (sentiment === 'positive') {
+              return <span className="text-green-500">Positive</span>
+            }
+
+            if (sentiment === 'negative') {
+              return <span className="text-red-500">Negative</span>
+            }
+
+            if (sentiment === 'neutral') {
+              return <span className="text-gray-500">Neutral</span>
+            }
+
+            if (sentiment === 'mixed') {
+              return <span className="text-yellow-500">Mixed</span>
+            }
+          }}
+        />
+
+        <Table.Column<Comment>
+          title="Text Analytics"
+          dataIndex="sentiments"
+          key="azure-sentiment"
+          render={(value) => {
+            const sentiment = value.find(
+              (sentiment: any) => sentiment.provider === 'azure',
+            )?.sentiment
+
+            if (sentiment === 'positive') {
+              return <span className="text-green-500">Positive</span>
+            }
+
+            if (sentiment === 'negative') {
+              return <span className="text-red-500">Negative</span>
+            }
+
+            if (sentiment === 'neutral') {
+              return <span className="text-gray-500">Neutral</span>
+            }
+
+            if (sentiment === 'mixed') {
+              return <span className="text-yellow-500">Mixed</span>
+            }
+          }}
+        />
+
+        <Table.Column<Comment>
+          title="Sentiment"
+          dataIndex="sentiment"
+          key="sentiment"
+          render={(sentiment) => {
+            if (sentiment === 'positive') {
+              return <span className="text-green-500">Positive</span>
+            }
+
+            if (sentiment === 'negative') {
+              return <span className="text-red-500">Negative</span>
+            }
+
+            if (sentiment === 'neutral') {
+              return <span className="text-gray-500">Neutral</span>
+            }
+
+            if (sentiment === 'mixed') {
+              return <span className="text-yellow-500">Mixed</span>
+            }
+          }}
+        />
+      </Table>
     </div>
   )
 }
