@@ -2,6 +2,7 @@ import './globals.css'
 import 'antd/dist/reset.css'
 
 import { AntdRegistry } from '@ant-design/nextjs-registry'
+import { G2 } from '@ant-design/plots'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
@@ -11,6 +12,15 @@ import { Toaster } from '@/components/ui/sonner'
 import { Providers } from './providers'
 
 const inter = Inter({ subsets: ['latin'] })
+
+const dark = G2.getTheme('dark')
+
+dark.geometries.interval.rect.active.style.stroke = '#151718'
+
+G2.registerTheme('custom-dark', {
+  ...dark,
+  background: 'transparent',
+})
 
 export const metadata: Metadata = {
   title: 'Vizo',

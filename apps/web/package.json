@@ -13,6 +13,7 @@
     "@ant-design/charts": "^2.1.1",
     "@ant-design/icons": "^5.3.1",
     "@ant-design/nextjs-registry": "^1.0.0",
+    "@ant-design/plots": "1.2.5",
     "@azure/ai-language-text": "^1.1.0",
     "@azure/ai-text-analytics": "^5.1.0",
     "@google-cloud/language": "^6.3.0",
