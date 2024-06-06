@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.25.0",
+    "@auth/drizzle-adapter": "^1.2.0",
     "@vercel/postgres": "^0.7.2",
     "@vizo/env": "workspace:*",
     "dotenv-cli": "7.3.0",

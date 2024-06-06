@@ -8,11 +8,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@auth/core": "^0.25.0",
+    "@auth/core": "^0.32.0",
+    "@auth/drizzle-adapter": "^1.2.0",
     "@vizo/drizzle": "workspace:*",
     "@vizo/env": "workspace:*",
     "drizzle-orm": "^0.29.3",
-    "next-auth": "beta"
+    "next-auth": "5.0.0-beta.19"
   },
   "devDependencies": {
     "@vizo/eslint-config": "workspace:*",
