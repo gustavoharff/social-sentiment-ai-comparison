@@ -13,5 +13,5 @@ export function LogoutButton() {
     router.push('/auth/sign-in')
   }
 
-  return <Button onClick={handleLogout}>Logout</Button>
+  return <Button onClick={handleLogout}>Sair</Button>
 }

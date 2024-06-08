@@ -10,7 +10,6 @@ import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import localeData from 'dayjs/plugin/localeData'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 import weekday from 'dayjs/plugin/weekday'
 import weekOfYear from 'dayjs/plugin/weekOfYear'
@@ -20,7 +19,6 @@ import { useTheme } from 'next-themes'
 import { useEffect, useMemo, useState } from 'react'
 import colors from 'tailwindcss/colors'
 
-dayjs.extend(relativeTime)
 dayjs.extend(localizedFormat)
 dayjs.extend(customParseFormat)
 dayjs.extend(advancedFormat)
@@ -101,17 +99,17 @@ export default function Report() {
     return [
       {
         id: 'positive',
-        name: 'Positive',
+        name: 'Positivo',
         value: Number.isNaN(positivePercentage) ? 0 : positivePercentage,
       },
       {
         id: 'negative',
-        name: 'Negative',
+        name: 'Negativo',
         value: Number.isNaN(negativePercentage) ? 0 : negativePercentage,
       },
       {
         id: 'neutral',
-        name: 'Neutral',
+        name: 'Neutro',
         value: Number.isNaN(neutralPercentage) ? 0 : neutralPercentage,
       },
     ]
@@ -120,7 +118,7 @@ export default function Report() {
   return (
     <Spin spinning={loading}>
       <div className="mx-auto mt-4 flex w-[calc(100%-4rem)] flex-col gap-4">
-        <h1 className="text-2xl font-bold">Report</h1>
+        <h1 className="text-2xl font-bold">Relatório</h1>
 
         <div className="flex justify-between">
           <Pie
@@ -202,7 +200,7 @@ export default function Report() {
                 type: 'text',
                 tooltip: false,
                 style: {
-                  text: comments.length + '\ncomments',
+                  text: comments.length + '\ncomentários',
                   x: '50%',
                   y: '50%',
                   textAlign: 'center',
@@ -401,7 +399,7 @@ export default function Report() {
             ]}
             meta={{
               comments: {
-                alias: 'Comments',
+                alias: 'Comentários',
               },
             }}
             padding="auto"
@@ -420,7 +418,7 @@ export default function Report() {
               },
               formatter: (data) => {
                 return {
-                  name: 'Comments',
+                  name: 'Comentários',
                   value: data.comments,
                 }
               },

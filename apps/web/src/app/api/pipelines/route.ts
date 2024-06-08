@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     const [commentsTask] = await db
       .insert(task)
       .values({
-        name: 'Comments collection',
+        name: 'Coleta de comentários',
         type: 'comments-collection',
         pipelineId,
       })
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
     const [awsTask] = await db
       .insert(task)
       .values({
-        name: 'AWS Analysis',
+        name: 'Análise Comprehend (AWS)',
         type: 'aws-analysis',
         pipelineId,
       })
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
     const [googleTask] = await db
       .insert(task)
       .values({
-        name: 'Google analysis',
+        name: 'Análise Cloud Natural Language (Google)',
         type: 'google-analysis',
         pipelineId,
       })
@@ -171,7 +171,7 @@ export async function POST(request: NextRequest) {
     const [azureTask] = await db
       .insert(task)
       .values({
-        name: 'Azure analysis',
+        name: 'Análise Text Analytics (Azure)',
         type: 'azure-analysis',
         pipelineId,
       })

@@ -1,12 +1,11 @@
-import { DrizzleAdapter } from '@auth/drizzle-adapter'
-import { db } from '@vizo/drizzle'
 import { env } from '@vizo/env'
 import type { NextAuthConfig, Session } from 'next-auth'
 
+import { drizzleAuthAdapter } from './drizzle-auth-adapter'
 import { facebookProvider } from './facebook-provider'
 
 export const authConfig = {
-  adapter: DrizzleAdapter(db),
+  adapter: drizzleAuthAdapter,
   providers: [facebookProvider],
   trustHost: true,
   pages: {

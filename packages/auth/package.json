@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@auth/core": "^0.32.0",
-    "@auth/drizzle-adapter": "^1.2.0",
     "@vizo/drizzle": "workspace:*",
     "@vizo/env": "workspace:*",
     "drizzle-orm": "^0.29.3",

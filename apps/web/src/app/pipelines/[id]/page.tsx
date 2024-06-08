@@ -36,7 +36,7 @@ export default function Pipeline() {
 
         <Link href={`/pipelines/${id}/report`}>
           <Button type="primary" className="mt-4" icon={<LineChartOutlined />}>
-            View report
+            Visualizar relatório
           </Button>
         </Link>
       </div>

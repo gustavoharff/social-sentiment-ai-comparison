@@ -15,6 +15,7 @@ import { Button } from 'antd'
 import axios from 'axios'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
+import ptBr from 'dayjs/locale/pt-br'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import Link from 'next/link'
 import { green, red, yellow } from 'tailwindcss/colors'
@@ -23,6 +24,7 @@ import { StartCollectionDialog } from '@/components/start-collection-dialog'
 import { useCustomModal } from '@/hooks/use-custom-modal'
 
 dayjs.extend(relativeTime)
+dayjs.locale(ptBr)
 
 type Pipeline = typeof pipeline.$inferSelect & {
   tasks: (typeof task.$inferSelect)[]
@@ -122,7 +124,7 @@ export default function Home() {
             <CommentOutlined className="text-6xl opacity-60" />
 
             <span className="text-center">
-              Get started by selecting a page to collect comments from.
+              Comece selecionando uma página para coletar comentários.
             </span>
             <Button
               type="primary"
@@ -137,7 +139,7 @@ export default function Home() {
                 })
               }}
             >
-              Start collecting
+              Começar coleta
             </Button>
           </div>
         </div>

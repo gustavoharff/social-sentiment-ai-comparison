@@ -63,7 +63,7 @@ export function StartCollectionDialog(props: StartCollectionDialogProps) {
 
   return (
     <Card>
-      <Card.Header title="Start Collection" icon={<PlayCircleOutlined />}>
+      <Card.Header title="Começar coletar" icon={<PlayCircleOutlined />}>
         <Button type="text" icon={<CloseOutlined />} onClick={onRequestClose} />
       </Card.Header>
 
@@ -72,11 +72,11 @@ export function StartCollectionDialog(props: StartCollectionDialogProps) {
           <Spin spinning={loading}>
             <div className="flex flex-col px-6 pt-4">
               <span className="mb-4">
-                Select a page to start collecting comments from.
+                Selecione uma página para começar a coletar comentários.
               </span>
 
               <Form.Item
-                label="Page"
+                label="Página"
                 name="page"
                 required
                 rules={[{ required: true }]}
@@ -97,11 +97,11 @@ export function StartCollectionDialog(props: StartCollectionDialogProps) {
           <Card.Footer className="p-4">
             <div className="flex w-full items-center justify-end gap-2">
               <Button type="text" onClick={onRequestClose}>
-                Cancel
+                Cancelar
               </Button>
 
               <Button type="primary" htmlType="submit" loading={sending}>
-                Start Collection
+                Começar
               </Button>
             </div>
           </Card.Footer>

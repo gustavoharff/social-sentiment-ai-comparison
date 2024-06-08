@@ -11,8 +11,8 @@ export function ThemeToggle() {
       value={resolvedTheme}
       onChange={(e) => setTheme(e.target.value)}
     >
-      <Radio.Button value="light">Light</Radio.Button>
-      <Radio.Button value="dark">Dark</Radio.Button>
+      <Radio.Button value="light">Claro</Radio.Button>
+      <Radio.Button value="dark">Escuro</Radio.Button>
     </Radio.Group>
   )
 }
