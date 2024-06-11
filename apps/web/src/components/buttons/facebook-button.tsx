@@ -22,7 +22,7 @@ export function FacebookButton(props: ComponentProps<typeof Button>) {
       onClick={handleLogin}
       {...props}
     >
-      Sign in with Facebook
+      Continuar com Facebook
     </Button>
   )
 }

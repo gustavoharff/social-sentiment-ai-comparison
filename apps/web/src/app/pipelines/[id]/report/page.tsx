@@ -115,6 +115,60 @@ export default function Report() {
     ]
   }, [comments])
 
+  const perDayData = useMemo(() => {
+    const data = comments.reduce(
+      (acc, comment) => {
+        const date = dayjs(comment.publishedAt).format('YYYY-MM-DD')
+
+        const sentiment = comment.sentiments.find(
+          (sentiment) => sentiment.provider === 'aws',
+        )?.sentiment
+
+        if (sentiment === 'positive') {
+          acc[date] = {
+            ...acc[date],
+            positive: (acc[date]?.positive || 0) + 1,
+          }
+        }
+
+        if (sentiment === 'negative') {
+          acc[date] = {
+            ...acc[date],
+            negative: (acc[date]?.negative || 0) + 1,
+          }
+        }
+
+        if (sentiment === 'neutral') {
+          acc[date] = {
+            ...acc[date],
+            neutral: (acc[date]?.neutral || 0) + 1,
+          }
+        }
+
+        return acc
+      },
+      {} as Record<
+        string,
+        { positive?: number; negative?: number; neutral?: number }
+      >,
+    )
+
+    return Object.entries(data).map(([date, sentiments]) => {
+      return {
+        date,
+        comments:
+          (sentiments.positive || 0) +
+          (sentiments.negative || 0) +
+          (sentiments.neutral || 0),
+        sentiment: sentiments.positive
+          ? 'positive'
+          : sentiments.negative
+            ? 'negative'
+            : 'neutral',
+      }
+    })
+  }, [comments])
+
   return (
     <Spin spinning={loading}>
       <div className="mx-auto mt-4 flex w-[calc(100%-4rem)] flex-col gap-4">
@@ -215,188 +269,7 @@ export default function Report() {
           <Line
             className="w-1/2"
             theme={resolvedTheme === 'dark' ? 'custom-dark' : 'light'}
-            data={[
-              {
-                date: '2021-01-01',
-                comments: 5,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-01',
-                comments: 2,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-01',
-                comments: 0,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-02',
-                comments: 12,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-02',
-                comments: 8,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-02',
-                comments: 5,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-03',
-                comments: 20,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-03',
-                comments: 10,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-03',
-                comments: 7,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-04',
-                comments: 32,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-04',
-                comments: 15,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-04',
-                comments: 10,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-05',
-                comments: 40,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-05',
-                comments: 20,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-05',
-                comments: 15,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-06',
-                comments: 50,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-06',
-                comments: 20,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-06',
-                comments: 25,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-07',
-                comments: 60,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-07',
-                comments: 25,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-07',
-                comments: 35,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-08',
-                comments: 70,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-08',
-                comments: 30,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-08',
-                comments: 40,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-09',
-                comments: 80,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-09',
-                comments: 40,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-09',
-                comments: 50,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-10',
-                comments: 90,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-10',
-                comments: 50,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-10',
-                comments: 60,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-11',
-                comments: 100,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-11',
-                comments: 60,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-11',
-                comments: 70,
-                sentiment: 'neutral',
-              },
-              {
-                date: '2021-01-12',
-                comments: 110,
-                sentiment: 'positive',
-              },
-              {
-                date: '2021-01-12',
-                comments: 70,
-                sentiment: 'negative',
-              },
-              {
-                date: '2021-01-12',
-                comments: 80,
-                sentiment: 'neutral',
-              },
-            ]}
+            data={perDayData}
             meta={{
               comments: {
                 alias: 'Comentários',
