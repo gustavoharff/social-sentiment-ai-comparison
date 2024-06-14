@@ -108,11 +108,6 @@ export async function promoteSentimentsTask({
         content: `Sentiment: ${sentiment}`,
       })
 
-      taskFile.addLine({
-        type: 'text',
-        content: '--------------------------------------------------',
-      })
-
       await taskFile.save()
     }
 

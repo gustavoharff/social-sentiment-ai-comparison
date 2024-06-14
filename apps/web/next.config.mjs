@@ -6,6 +6,7 @@ const nextConfig = {
     },
   },
 
+
   images: {
     remotePatterns: [
       { hostname: 'platform-lookaside.fbsbx.com' }

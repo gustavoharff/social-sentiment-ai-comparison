@@ -103,14 +103,16 @@ export async function googleTask({
         content: `Magnitude: ${result.documentSentiment?.magnitude}`,
       })
 
-      taskFile.addLine({
-        type: 'text',
-        content: `Sentiment: ${sentiment}`,
-      })
+      const status = {
+        positive: LogSymbol.SUCCESS,
+        negative: LogSymbol.ERROR,
+        neutral: LogSymbol.INFO,
+        mixed: LogSymbol.WARNING,
+      }
 
       taskFile.addLine({
         type: 'text',
-        content: '--------------------------------------------------',
+        content: `Sentiment: ${status[sentiment]} ${sentiment}`,
       })
 
       await taskFile.save()

@@ -32,7 +32,7 @@ export default function Pipeline() {
   return (
     <div className="mx-auto mt-4 flex w-[calc(100%-4rem)] flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Pipeline</h1>
+        <h1 className="text-2xl font-bold">Análise</h1>
 
         <Link href={`/pipelines/${id}/report`}>
           <Button type="primary" className="mt-4" icon={<LineChartOutlined />}>
