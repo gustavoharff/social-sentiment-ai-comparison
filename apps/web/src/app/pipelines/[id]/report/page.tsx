@@ -116,57 +116,97 @@ export default function Report() {
   }, [comments])
 
   const perDayData = useMemo(() => {
-    const data = comments.reduce(
-      (acc, comment) => {
-        const date = dayjs(comment.publishedAt).format('YYYY-MM-DD')
+    const positiveComments = comments.filter((c) => c.sentiment === 'positive')
+    const negativeComments = comments.filter((c) => c.sentiment === 'negative')
+    const neutralComments = comments.filter((c) => c.sentiment === 'neutral')
+    const mixedComments = comments.filter((c) => c.sentiment === 'mixed')
 
-        const sentiment = comment.sentiments.find(
-          (sentiment) => sentiment.provider === 'aws',
-        )?.sentiment
+    interface Item {
+      date: string
+      sentiment: (typeof comments)[0]['sentiment']
+      comments: number
+    }
 
-        if (sentiment === 'positive') {
-          acc[date] = {
-            ...acc[date],
-            positive: (acc[date]?.positive || 0) + 1,
-          }
+    const positiveItems: Item[] = []
+    const negativeItems: Item[] = []
+    const neutralItems: Item[] = []
+    const mixedItems: Item[] = []
+
+    for (const comment of comments) {
+      if (comment.sentiment === 'positive') {
+        const date = positiveItems.find((c) => {
+          return c.date === dayjs(comment.publishedAt).format('YYYY-MM-DD')
+        })
+
+        if (!date) {
+          positiveItems.push({
+            date: dayjs(comment.publishedAt).format('YYYY-MM-DD'),
+            comments: 1,
+            sentiment: 'positive',
+          })
+        } else {
+          date.comments += 1
+          positiveItems.slice(positiveItems.indexOf(date), 1)
+          positiveItems.push(date)
         }
-
-        if (sentiment === 'negative') {
-          acc[date] = {
-            ...acc[date],
-            negative: (acc[date]?.negative || 0) + 1,
-          }
-        }
-
-        if (sentiment === 'neutral') {
-          acc[date] = {
-            ...acc[date],
-            neutral: (acc[date]?.neutral || 0) + 1,
-          }
-        }
-
-        return acc
-      },
-      {} as Record<
-        string,
-        { positive?: number; negative?: number; neutral?: number }
-      >,
-    )
-
-    return Object.entries(data).map(([date, sentiments]) => {
-      return {
-        date,
-        comments:
-          (sentiments.positive || 0) +
-          (sentiments.negative || 0) +
-          (sentiments.neutral || 0),
-        sentiment: sentiments.positive
-          ? 'positive'
-          : sentiments.negative
-            ? 'negative'
-            : 'neutral',
       }
-    })
+
+      if (comment.sentiment === 'negative') {
+        const date = negativeItems.find((c) => {
+          return c.date === dayjs(comment.publishedAt).format('YYYY-MM-DD')
+        })
+
+        if (!date) {
+          negativeItems.push({
+            date: dayjs(comment.publishedAt).format('YYYY-MM-DD'),
+            comments: 1,
+            sentiment: 'negative',
+          })
+        } else {
+          date.comments += 1
+          negativeItems.slice(negativeItems.indexOf(date), 1)
+          negativeItems.push(date)
+        }
+      }
+
+      if (comment.sentiment === 'neutral') {
+        const date = neutralItems.find((c) => {
+          return c.date === dayjs(comment.publishedAt).format('YYYY-MM-DD')
+        })
+
+        if (!date) {
+          neutralItems.push({
+            date: dayjs(comment.publishedAt).format('YYYY-MM-DD'),
+            comments: 1,
+            sentiment: 'neutral',
+          })
+        } else {
+          date.comments += 1
+          neutralItems.slice(neutralItems.indexOf(date), 1)
+          neutralItems.push(date)
+        }
+      }
+
+      if (comment.sentiment === 'mixed') {
+        const date = mixedItems.find((c) => {
+          return c.date === dayjs(comment.publishedAt).format('YYYY-MM-DD')
+        })
+
+        if (!date) {
+          mixedItems.push({
+            date: dayjs(comment.publishedAt).format('YYYY-MM-DD'),
+            comments: 1,
+            sentiment: 'mixed',
+          })
+        } else {
+          date.comments += 1
+          mixedItems.slice(mixedItems.indexOf(date), 1)
+          mixedItems.push(date)
+        }
+      }
+    }
+
+    return [...positiveItems, ...negativeItems, ...neutralItems, ...mixedItems]
   }, [comments])
 
   return (
@@ -279,11 +319,6 @@ export default function Report() {
             xField="date"
             yField="comments"
             seriesField="sentiment"
-            // yAxis={{
-            //   max: monitor.owner.license.maxCommentsPerMonthPerMonitoring
-            //     ? monitor.owner.license.maxCommentsPerMonthPerMonitoring * 1.1
-            //     : undefined,
-            // }}
             tooltip={{
               title: (title) => {
                 console.log(title)
@@ -347,7 +382,7 @@ export default function Report() {
         </div>
 
         <Table
-          className="mt-4"
+          className="my-4"
           dataSource={comments}
           rowKey="id"
           pagination={false}
@@ -377,6 +412,10 @@ export default function Report() {
 
               if (sentiment === 'neutral') {
                 return <span className="text-gray-500">Neutral</span>
+              }
+
+              if (sentiment === 'mixed') {
+                return <span className="text-yellow-500">Mixed</span>
               }
             }}
           />

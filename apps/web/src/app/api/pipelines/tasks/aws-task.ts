@@ -86,9 +86,19 @@ export async function awsTask({
       .set({ status: 'completed', finishedAt: new Date() })
       .where(eq(task.id, taskId))
   } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : typeof error === 'string'
+          ? error
+          : null
+
     taskFile.addLine({
       type: 'text',
-      content: LogSymbol.ERROR + ' An error occurred while analyzing comments',
+      content:
+        LogSymbol.ERROR +
+        ' An error occurred while analyzing comments\n\n' +
+        message,
     })
 
     await taskFile.save()

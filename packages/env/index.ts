@@ -17,6 +17,10 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: z.string().min(1),
     AZURE_LANGUAGE_ENDPOINT: z.string().min(1),
     AZURE_LANGUAGE_KEY: z.string().min(1),
+    GOOGLE_CLIENT_ID: z.string().min(1),
+    GOOGLE_CLIENT_SECRET: z.string().min(1),
+    GOOGLE_QUOTA_PROJECT_ID: z.string().min(1),
+    GOOGLE_REFRESH_TOKEN: z.string().min(1),
   },
   client: {
     // NEXT_PUBLIC_VERCEL_URL: z.string().url().min(1),
@@ -42,6 +46,10 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     AZURE_LANGUAGE_ENDPOINT: process.env.AZURE_LANGUAGE_ENDPOINT,
     AZURE_LANGUAGE_KEY: process.env.AZURE_LANGUAGE_KEY,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    GOOGLE_QUOTA_PROJECT_ID: process.env.GOOGLE_QUOTA_PROJECT_ID,
+    GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN,
   },
   emptyStringAsUndefined: true,
 })

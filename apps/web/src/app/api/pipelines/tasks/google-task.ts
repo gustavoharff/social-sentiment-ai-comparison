@@ -1,6 +1,7 @@
 import language from '@google-cloud/language'
 import { db } from '@vizo/drizzle'
 import { commentSentiment, task } from '@vizo/drizzle/schema'
+import { env } from '@vizo/env'
 import { eq } from 'drizzle-orm'
 
 import { LogSymbol } from '@/utils/log-symbol'
@@ -26,7 +27,16 @@ export async function googleTask({
       .set({ status: 'running', startedAt: new Date() })
       .where(eq(task.id, taskId))
 
-    const client = new language.LanguageServiceClient()
+    const client = new language.LanguageServiceClient({
+      credentials: {
+        client_id: env.GOOGLE_CLIENT_ID,
+        client_secret: env.GOOGLE_CLIENT_SECRET,
+        quota_project_id: env.GOOGLE_QUOTA_PROJECT_ID,
+        refresh_token: env.GOOGLE_REFRESH_TOKEN,
+        universe_domain: 'googleapis.com',
+        type: 'authorized_user',
+      },
+    })
 
     const comments = await db.query.comment.findMany({
       where(fields, { eq }) {
@@ -39,6 +49,7 @@ export async function googleTask({
         document: {
           content: c.message,
           type: 'PLAIN_TEXT',
+          language: 'pt',
         },
       })
 
@@ -58,23 +69,17 @@ export async function googleTask({
           return 'neutral'
         }
 
-        if (score > positiveThreshold && magnitude >= highMagnitudeThreshold) {
+        if (score >= 0.5 && magnitude >= 1.5) {
           return 'positive'
-        }
-
-        if (score < negativeThreshold && magnitude >= highMagnitudeThreshold) {
+        } else if (score <= 0 && magnitude >= 0.5) {
           return 'negative'
-        }
-
-        if (Math.abs(score) <= 0.1 && magnitude < highMagnitudeThreshold) {
+        } else if (score >= 0 && score <= 0.1 && magnitude < 1.5) {
+          return 'neutral'
+        } else if (score >= -0.1 && score <= 0.1 && magnitude >= 1.5) {
+          return 'mixed'
+        } else {
           return 'neutral'
         }
-
-        if (Math.abs(score) <= 0.1 && magnitude >= highMagnitudeThreshold) {
-          return 'mixed'
-        }
-
-        return 'neutral'
       })()
 
       await db.insert(commentSentiment).values({
@@ -123,9 +128,19 @@ export async function googleTask({
       .set({ status: 'completed', finishedAt: new Date() })
       .where(eq(task.id, taskId))
   } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : typeof error === 'string'
+          ? error
+          : null
+
     taskFile.addLine({
       type: 'text',
-      content: LogSymbol.ERROR + ' An error occurred while analyzing comments',
+      content:
+        LogSymbol.ERROR +
+        ' An error occurred while analyzing comments\n\n' +
+        message,
     })
 
     await taskFile.save()
