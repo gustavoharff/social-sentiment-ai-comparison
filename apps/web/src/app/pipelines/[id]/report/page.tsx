@@ -396,6 +396,7 @@ export default function Report() {
           <Table.Column<Comment>
             title="Comprehend"
             dataIndex="sentiments"
+            align="center"
             key="aws-sentiment"
             render={(value: Comment['sentiments']) => {
               const sentiment = value.find(
@@ -423,6 +424,8 @@ export default function Report() {
           <Table.Column<Comment>
             title="Cloud Natural Language"
             dataIndex="sentiments"
+            width={200}
+            align="center"
             key="google-sentiment"
             render={(value: Comment['sentiments']) => {
               const sentiment = value.find(
@@ -449,6 +452,8 @@ export default function Report() {
 
           <Table.Column<Comment>
             title="Text Analytics"
+            width={150}
+            align="center"
             dataIndex="sentiments"
             key="azure-sentiment"
             render={(value: Comment['sentiments']) => {
