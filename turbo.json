@@ -24,6 +24,7 @@
     "db:studio": {},
     "db:dbml": {},
     "db:seed": {},
+    "start": {},
     "dev": {
       "cache": false,
       "persistent": true

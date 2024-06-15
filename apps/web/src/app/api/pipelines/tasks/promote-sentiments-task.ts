@@ -56,15 +56,35 @@ export async function promoteSentimentsTask({
       const mixedPercentage = (mixedCount / total) * 100
 
       const sentiment = (() => {
-        if (positivePercentage > 50) {
+        if (
+          positivePercentage > negativePercentage &&
+          positivePercentage > neutralPercentage &&
+          positivePercentage > mixedPercentage
+        ) {
           return 'positive'
         }
 
-        if (negativePercentage > 50) {
+        if (
+          negativePercentage > positivePercentage &&
+          negativePercentage > neutralPercentage &&
+          negativePercentage > mixedPercentage
+        ) {
           return 'negative'
         }
 
-        if (mixedPercentage > 50) {
+        if (
+          neutralPercentage > positivePercentage &&
+          neutralPercentage > negativePercentage &&
+          neutralPercentage > mixedPercentage
+        ) {
+          return 'neutral'
+        }
+
+        if (
+          mixedPercentage > positivePercentage &&
+          mixedPercentage > negativePercentage &&
+          mixedPercentage > neutralPercentage
+        ) {
           return 'mixed'
         }
 
@@ -80,27 +100,50 @@ export async function promoteSentimentsTask({
 
       taskFile.addLine({
         type: 'text',
-        content: `Message: ${c.message}`,
+        content: `Comentário: ${c.message}`,
       })
+
+      let positiveText = ''
+      if (sentiment === 'positive') {
+        positiveText = '\\u001b[32m'
+      }
+      positiveText = positiveText + 'positive: ' + positivePercentage + '%'
+      if (sentiment === 'positive') {
+        positiveText = positiveText + '\\u001b[0m'
+      }
+
+      let negativeText = ''
+      if (sentiment === 'negative') {
+        negativeText = '\\u001b[31m'
+      }
+      negativeText = negativeText + 'negative: ' + negativePercentage + '%'
+      if (sentiment === 'negative') {
+        negativeText = negativeText + '\\u001b[0m'
+      }
+
+      let neutralText = ''
+      if (sentiment === 'neutral') {
+        neutralText = '\\u001b[34m'
+      }
+      neutralText = neutralText + 'neutral: ' + neutralPercentage + '%'
+      if (sentiment === 'neutral') {
+        neutralText = neutralText + '\\u001b[0m'
+      }
+
+      let mixedText = ''
+      if (sentiment === 'mixed') {
+        mixedText = '\\u001b[33m'
+      }
+      mixedText = mixedText + 'mixed: ' + mixedPercentage + '%'
+      if (sentiment === 'mixed') {
+        mixedText = mixedText + '\\u001b[0m'
+      }
 
       taskFile.addLine({
         type: 'text',
-        content: `Positive: ${positivePercentage}%`,
-      })
-
-      taskFile.addLine({
-        type: 'text',
-        content: `Negative: ${negativePercentage}%`,
-      })
-
-      taskFile.addLine({
-        type: 'text',
-        content: `Neutral: ${neutralPercentage}%`,
-      })
-
-      taskFile.addLine({
-        type: 'text',
-        content: `Mixed: ${mixedPercentage}%`,
+        content: [positiveText, negativeText, neutralText, mixedText].join(
+          ', ',
+        ),
       })
 
       taskFile.addLine({

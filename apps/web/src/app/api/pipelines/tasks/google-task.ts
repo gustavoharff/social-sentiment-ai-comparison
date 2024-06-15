@@ -54,10 +54,6 @@ export async function googleTask({
       })
 
       const sentiment: 'positive' | 'negative' | 'neutral' | 'mixed' = (() => {
-        const positiveThreshold = 0.25
-        const negativeThreshold = -0.25
-        const highMagnitudeThreshold = 2.0
-
         const { score, magnitude } = result.documentSentiment || {}
 
         if (
@@ -95,7 +91,7 @@ export async function googleTask({
 
       taskFile.addLine({
         type: 'text',
-        content: `Message: ${c.message}`,
+        content: `Comentário: ${c.message}`,
       })
 
       taskFile.addLine({
@@ -117,7 +113,7 @@ export async function googleTask({
 
       taskFile.addLine({
         type: 'text',
-        content: `Sentiment: ${status[sentiment]} ${sentiment}`,
+        content: `Sentimento: ${status[sentiment]} ${sentiment}`,
       })
 
       await taskFile.save()

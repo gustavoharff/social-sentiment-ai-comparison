@@ -39,10 +39,6 @@ export async function azureTask({
     })
 
     for (const c of comments) {
-      const index = comments.indexOf(c) + 1
-
-      const percentage = (index / comments.length) * 100
-
       const [analysis] = await client.analyze(
         'SentimentAnalysis',
         [
@@ -77,8 +73,17 @@ export async function azureTask({
 
       taskFile.addLine({
         type: 'text',
-        content:
-          percentage + '% ' + status[sentiment] + ` ${sentiment} - ${c.id}`,
+        content: '--------------------------------------------------',
+      })
+
+      taskFile.addLine({
+        type: 'text',
+        content: `Comentário: ${c.message}`,
+      })
+
+      taskFile.addLine({
+        type: 'text',
+        content: `Sentimento: ${status[sentiment]} ${sentiment}`,
       })
 
       await taskFile.save()
